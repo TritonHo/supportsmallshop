@@ -1,0 +1,23 @@
+1.  system add locale
+    sudo locale-gen en_HK.UTF-8
+    sudo update-locale
+
+2.  package installation
+
+sudo apt-get install tomcat7 postgresql-9.3 postgresql-contrib-9.3 git
+
+3.  update tomcat memory to 512Mb
+    edit: /etc/init.d/tomcat7
+    JAVA_OPTS="-Djava.awt.headless=true -Xmx512M"
+
+4.	deploy /etc/tomcat7/context.xml and /etc/tomcat7/server.xml
+    (update the JDBC information in context.xml)
+
+5.	/usr/share/tomcat7/lib
+	prepare:
+		postgresql-9.3.jdbc4.jar
+		http://jdbc.postgresql.org/download/postgresql-9.3-1102.jdbc41.jar
+
+6.	allow tomcat7 to bind port 80
+	http://stackoverflow.com/questions/23272666/tomcat7-bind-to-port-80-fails-in-ubuntu-14-04lts
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">	
+	<select id="getShops" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.Shop">
+		<![CDATA[
+		select id, name, short_description as shortDescription, full_description as fullDescription, open_hours as openHours, 
+		shop_type as shopType, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
+		from shop
+		where start_time < current_timestamp and (end_time is null or current_timestamp <= end_time)
+		]]>
+		<if test="hasGeoSearch != null">
+			and (latitude1000, longitude1000) in
+			<foreach item="areaBlock" index="index" collection="areaBlockArray" open="(" separator="," close=")">
+				(#{areaBlock.latitude1000,javaType=int}, #{areaBlock.longitude1000,javaType=int})
+			</foreach>
+		</if>
+		<if test="searchWord != null">
+			and (
+				search_tags like '%' || #{searchWord,javaType=String} || '%'
+				or name like '%' || #{searchWord,javaType=String} || '%'
+				or short_description like '%' || #{searchWord,javaType=String} || '%'
+				or full_description like '%' || #{searchWord,javaType=String} || '%'
+				or address like '%' || #{searchWord,javaType=String} || '%'
+				or phone like '%' || #{searchWord,javaType=String} || '%'
+			)
+		</if>
+		<if test="district != null">
+			and district = #{district,javaType=int}
+		</if>
+		<if test="shopType != null">
+			and shop_type = #{shopType,javaType=String}::shop_type
+		</if>
+	</select>
+</mapper>

@@ -6,3 +6,4 @@ CREATE DATABASE supportsmallshop WITH OWNER = supportsmallshop ENCODING = 'UTF8'
 
 ALTER DATABASE supportsmallshop SET timezone TO 'Asia/Hong_Kong';
 
+CREATE EXTENSION "uuid-ossp";

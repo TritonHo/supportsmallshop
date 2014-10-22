@@ -12,6 +12,8 @@
 
 	drop TYPE device_type;
 	drop TYPE shop_type;
+	drop TYPE removal_reason_type;
+
 */
 CREATE TYPE device_type AS ENUM ('ios', 'google-android');
 CREATE TYPE shop_type AS ENUM ('食肆', '零售（食物）','零售（其他）', '服務');
@@ -32,7 +34,6 @@ create table helper
     id UUID,
 	device_type device_type not null,
 	reg_id text not null,
-	secret text not null,
 	CONSTRAINT "user_pk" PRIMARY KEY (id),
 	UNIQUE(reg_id, device_type)
 );
@@ -43,7 +44,7 @@ create table removal
 	shop_id UUID not null,
 	helper_id UUID not null,
 	reason removal_reason_type not null,
-	secret text, /* if the secret is null, it means the user have replied the secret */
+	auth_code text, /* if the auth_code is null, it means the user have replied the auth_code */
 	CONSTRAINT "removal_pk" PRIMARY KEY (id)
 );
 
@@ -52,7 +53,7 @@ create table removal_response
 	id UUID,
 	helper_id UUID,
 	is_accept boolean not null,/* accept or reject the removal */
-	secret text, /* if the secret is null, it means the user have replied the secret */
+	auth_code text, /* if the auth_code is null, it means the user have replied the auth_code */
 	CONSTRAINT "removal_response_pk" PRIMARY KEY (id)
 );
 
@@ -107,7 +108,7 @@ create table submission
 
 	photo_url character varying(7), 
 
-	secret text, /* if the secret is null, it means the user have replied the secret */
+	auth_code text, /* if the secret is null, it means the user have replied the auth_code */
 	
 	/* promote the concurrency conflict */
 
@@ -120,7 +121,7 @@ create table submission_response
 (
 	submission_id UUID,
 	helper_id UUID,
-	secret text, /* if the secret is null, it means the user have replied the secret */
+	auth_code text, /* if the secret is null, it means the user have replied the auth_code */
 	response integer not null,
 	response_time timestamp not null default current_timestamp,
 	CONSTRAINT "submission_response_pk" PRIMARY KEY (submission_id, helper_id)

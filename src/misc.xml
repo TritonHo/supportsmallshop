@@ -7,4 +7,10 @@
 		select id, message, is_reject as isReject, is_serious_reject as isSeriousReject, is_accept as isAccept
 		from submission_response_type
 	</select>
+	
+	<update id="updateHelperRegId" parameterType="hashmap">
+		update helper 
+		set reg_id = #{newRegId,javaType=String}
+		where id = #{id,javaType=String}::uuid and device_type = #{deviceType,javaType=String}::device_type and reg_id = #{oldRegId,javaType=String}
+	</update>
 </mapper>

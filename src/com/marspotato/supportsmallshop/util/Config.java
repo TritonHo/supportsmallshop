@@ -15,7 +15,8 @@ public class Config {
 	public final static int NEW_TERRITORIES = 3;
 	
 	public final static String[] shopTypes = new String[]{"食肆", "零售（食物）","零售（其他）", "服務"}; 
-	
+	public final static String[] deviceTypes = new String[]{"ios", "google-android"}; 
+	public final static String[] deleteShopReasons = new String[]{"小店已倒閉", "已有重複紀錄", "含有色情、暴力或歧視性內容"}; 
 	
 	//static resource object
 	public static DateTimeFormatter defaultDateTimeFormatter = ISODateTimeFormat.basicDateTimeNoMillis();

@@ -8,6 +8,14 @@ public class InputUtil {
 		String output = r.getParameter(fieldName);
 		return output!=null?output:defaultValue;
 	}
+	public static String getNonEmptyString(HttpServletRequest r, String fieldName) throws Exception 
+	{
+		String output = r.getParameter(fieldName);
+		if (output == null || output.isEmpty())
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		
+		return output;
+	}
 
 	public static int getIntegerWithDefaultValue(HttpServletRequest r, String fieldName, int defaultValue)
 	{

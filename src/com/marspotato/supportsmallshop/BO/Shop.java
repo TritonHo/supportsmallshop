@@ -12,7 +12,7 @@ import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 public class Shop {
 	@Expose
-	public int id;
+	public String id;
 	@Expose
 	public String name;
 	@Expose

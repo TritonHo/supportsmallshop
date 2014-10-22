@@ -8,7 +8,7 @@
 		select id, name, short_description as shortDescription, full_description as fullDescription, open_hours as openHours, 
 		shop_type as shopType, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
 		from shop
-		where start_time < current_timestamp and (end_time is null or current_timestamp <= end_time)
+		where 1=1 
 		]]>
 		<if test="hasGeoSearch != null">
 			and (latitude1000, longitude1000) in

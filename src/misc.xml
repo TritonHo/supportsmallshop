@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">	
+	<select id="getCreateUpdateShopResponseTypes" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.CreateUpdateShopResponseType">
+		select id, message, is_reject as isReject, is_serious_reject as isSeriousReject, is_accept as isAccept
+		from submission_response_type
+	</select>
+</mapper>

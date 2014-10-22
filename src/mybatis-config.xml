@@ -18,5 +18,6 @@
 
 	<mappers>
 		<mapper resource="shop.xml" />
+		<mapper resource="misc.xml" />
 	</mappers>
 </configuration>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">	
+
+	<select id="getHelperID" parameterType="hashmap" resultType="String">
+		select id from helper
+		where device_type = #{deviceType,javaType=String}::device_type and reg_id = #{regId,javaType=String}
+	</select>
+	<insert id="createHelper" parameterType="hashmap" >
+		insert into helper(id, device_type, reg_id)
+		values(#{id,javaType=String}::uuid, #{deviceType,javaType=String}::device_type, #{regId,javaType=String})
+	</insert>
+
+
+	<update id="updateHelperRegId" parameterType="hashmap">
+		update helper 
+		set reg_id = #{newRegId,javaType=String}
+		where id = #{id,javaType=String}::uuid and device_type = #{deviceType,javaType=String}::device_type and reg_id = #{oldRegId,javaType=String}
+	</update>
+</mapper>

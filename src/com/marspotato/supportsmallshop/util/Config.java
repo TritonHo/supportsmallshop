@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 public class Config {
 	public final static int EARTH_RADIUS = 6371000; 
 	
+	public final static int WHOLE_HK = 0;
 	public final static int HK_ISLAND = 1;
 	public final static int KOWL0ON = 2;	
 	public final static int NEW_TERRITORIES = 3;

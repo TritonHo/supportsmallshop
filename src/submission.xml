@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">	
+	<insert id="saveCreateShopRecord" parameterType="com.marspotato.supportsmallshop.BO.Submission">
+		insert into submission
+		(
+			id, helper_id, 
+			name, short_description, full_description, search_tags, shop_type,  
+			open_hours, district, address, phone, latitude1000000, longitude1000000, photo_url
+		)
+		values
+		(
+			#{id}::uuid, #{helperId}::uuid,
+			#{name}, #{shortDescription}, #{fullDescription}, #{searchTags}, #{shopType}::shop_type, 
+			#{openHours}, #{district}, #{address}, #{phone}, #{latitude1000000}, #{longitude1000000}, #{photoUrl}
+		)
+	</insert>
+</mapper>

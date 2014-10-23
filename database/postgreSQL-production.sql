@@ -34,6 +34,7 @@ create table helper
     id UUID,
 	device_type device_type not null,
 	reg_id text not null,
+	last_update_time timestamp not null default current_timestamp,
 	CONSTRAINT "user_pk" PRIMARY KEY (id),
 	UNIQUE(reg_id, device_type)
 );
@@ -107,6 +108,7 @@ create table submission
 	longitude1000000 integer, /* the value of longitude * 1000000, the Accuracy is ~0.1m */
 
 	photo_url character varying(7), 
+	shop_type shop_type not null,
 
 	auth_code text, /* if the secret is null, it means the user have replied the auth_code */
 	

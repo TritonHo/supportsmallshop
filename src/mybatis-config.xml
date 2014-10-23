@@ -12,12 +12,16 @@
 	<environments default="default-env">
 		<environment id="default-env">
 			<transactionManager type="JDBC" />
-			<dataSource type="JNDI"> <property name="data_source" value="java:/comp/env/jdbc/supportsmallshopDB" /> </dataSource> 
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:/comp/env/jdbc/supportsmallshopDB" />
+			</dataSource>
 		</environment>
 	</environments>
 
 	<mappers>
-		<mapper resource="shop.xml" />
+		<mapper resource="helper.xml" />
 		<mapper resource="misc.xml" />
+		<mapper resource="shop.xml" />
+		<mapper resource="submission.xml" />
 	</mappers>
 </configuration>

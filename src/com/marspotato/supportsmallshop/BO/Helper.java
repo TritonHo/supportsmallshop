@@ -15,6 +15,39 @@ public class Helper {
 	@Expose
 	public String regId;
 	
+	public Helper(String id, String deviceType, String regId)
+	{
+		this.id = id;
+		this.deviceType = deviceType;
+		this.regId = regId;
+	}
+	
+	//
+	public static Helper getHelper(String deviceType, String regId)
+	{
+		HashMap<String, String> h = new HashMap<String, String>();
+		h.put("deviceType", deviceType);
+		h.put("regId", regId);
+		
+		Helper output = null;
+		String id = null;
+		SqlSession session = ConnectionContainer.getDBConnection();
+		try {
+			id = session.selectOne("getHelperID", h);
+			if (id == null)
+			{
+				id = session.selectOne("generateUUID");
+				h.put("id", id);
+				session.insert("createHelper", h);
+				session.commit();
+			}
+			output = new Helper(id, deviceType, regId);
+		} finally {
+			session.close();
+		}
+		return output;
+	}
+	
 	public static void updateHelperRegId(String id, String deviceType, String newRegId, String oldRegId)
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();

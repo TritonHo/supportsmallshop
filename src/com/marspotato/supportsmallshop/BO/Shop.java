@@ -20,9 +20,14 @@ public class Shop {
 	@Expose
 	public String fullDescription;
 	@Expose
+	public String searchTags;
+	
+	@Expose
 	public String shopType;
 	@Expose
 	public String openHours;
+	@Expose
+	public int district;
 	@Expose
 	public String address;
 	@Expose

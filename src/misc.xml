@@ -8,9 +8,7 @@
 		from submission_response_type
 	</select>
 	
-	<update id="updateHelperRegId" parameterType="hashmap">
-		update helper 
-		set reg_id = #{newRegId,javaType=String}
-		where id = #{id,javaType=String}::uuid and device_type = #{deviceType,javaType=String}::device_type and reg_id = #{oldRegId,javaType=String}
-	</update>
+	<select id="generateUUID" resultType="String">
+		select uuid_generate_v4()
+	</select>
 </mapper>

@@ -43,7 +43,6 @@ public final class ConnectionContainer {
 		}
 		return sqlSessionFactory.openSession();
 	}
-	
 	public static Jedis getRedisConnection() {
 		if (pool == null) {
 			// first time

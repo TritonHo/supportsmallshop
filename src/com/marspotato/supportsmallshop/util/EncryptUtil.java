@@ -62,10 +62,4 @@ public class EncryptUtil {
 		}
 		return output;
 	}
-	public static String generateRandomAuthCode()
-	{
-		//use java.util.uuid as a random string, is stupid but works.
-		String uuid = UUID.randomUUID().toString();
-		return encrypt(uuid);
-	}
 }

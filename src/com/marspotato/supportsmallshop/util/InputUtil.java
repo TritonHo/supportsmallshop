@@ -28,6 +28,18 @@ public class InputUtil {
 		
 		return output;
 	}
+	public static String getEncryptedString(HttpServletRequest r, String fieldName) throws Exception 
+	{
+		String temp = r.getParameter(fieldName);
+		if (temp == null || temp.isEmpty())
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		
+		String output = EncryptUtil.decrypt(temp);
+		if (output == null || output.isEmpty())
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		
+		return output;
+	}
 	
 	public static String getNonEmptyString(HttpServletRequest r, String fieldName) throws Exception 
 	{

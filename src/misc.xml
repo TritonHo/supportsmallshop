@@ -7,8 +7,4 @@
 		select id, message, is_reject as isReject, is_serious_reject as isSeriousReject, is_accept as isAccept
 		from submission_response_type
 	</select>
-	
-	<select id="generateUUID" resultType="String">
-		select uuid_generate_v4()
-	</select>
 </mapper>

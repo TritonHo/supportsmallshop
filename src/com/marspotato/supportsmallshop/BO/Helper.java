@@ -1,6 +1,7 @@
 package com.marspotato.supportsmallshop.BO;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -33,10 +34,10 @@ public class Helper {
 		String id = null;
 		SqlSession session = ConnectionContainer.getDBConnection();
 		try {
-			id = session.selectOne("getHelperID", h);
+			id = UUID.randomUUID().toString();
 			if (id == null)
 			{
-				id = session.selectOne("generateUUID");
+				id = UUID.randomUUID().toString();
 				h.put("id", id);
 				session.insert("createHelper", h);
 				session.commit();

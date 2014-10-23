@@ -1,6 +1,7 @@
 package com.marspotato.supportsmallshop.servlet;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +26,7 @@ public class CreateShopServlet extends HttpServlet {
     public CreateShopServlet() {
         super();
     }
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		Submission s = new Submission();
@@ -62,15 +64,14 @@ public class CreateShopServlet extends HttpServlet {
 		Helper h = Helper.getHelper(deviceType, regId);
 		s.helperId = h.id;
 
-		String authCode = EncryptUtil.generateRandomAuthCode();
+		String authCode = UUID.randomUUID().toString();
 		int result = s.saveCreateShopSubmissionToRedis(s.helperId, dt, authCode);
 		if (result > 0)
 		{
+			System.out.println("authCode = " + EncryptUtil.encrypt(authCode) );
 			//TODO: implement the server push to client for the authCode
 		}
 		
-		//no matter if the update success, always reply OK
 		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(s));
-		//TODO: add GCM send message
 	}
 }

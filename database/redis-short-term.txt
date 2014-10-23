@@ -1,0 +1,6 @@
+key create_shop_submission
+{
+	pk: user_id + dt + auth_code
+	value: submission json
+	expiration: 30 minutes
+}

@@ -45,7 +45,6 @@ create table removal
 	shop_id UUID not null,
 	helper_id UUID not null,
 	reason removal_reason_type not null,
-	auth_code text, /* if the auth_code is null, it means the user have replied the auth_code */
 	CONSTRAINT "removal_pk" PRIMARY KEY (id)
 );
 
@@ -54,7 +53,6 @@ create table removal_response
 	id UUID,
 	helper_id UUID,
 	is_accept boolean not null,/* accept or reject the removal */
-	auth_code text, /* if the auth_code is null, it means the user have replied the auth_code */
 	CONSTRAINT "removal_response_pk" PRIMARY KEY (id)
 );
 
@@ -110,8 +108,6 @@ create table submission
 	photo_url character varying(7), 
 	shop_type shop_type not null,
 
-	auth_code text, /* if the secret is null, it means the user have replied the auth_code */
-	
 	/* promote the concurrency conflict */
 
     last_update_time timestamp not null default current_timestamp,
@@ -123,7 +119,6 @@ create table submission_response
 (
 	submission_id UUID,
 	helper_id UUID,
-	auth_code text, /* if the secret is null, it means the user have replied the auth_code */
 	response integer not null,
 	response_time timestamp not null default current_timestamp,
 	CONSTRAINT "submission_response_pk" PRIMARY KEY (submission_id, helper_id)

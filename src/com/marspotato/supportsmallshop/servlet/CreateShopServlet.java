@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.Submission;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.EncryptUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -28,7 +29,7 @@ public class CreateShopServlet extends HttpServlet {
 	{	
 		Submission s = new Submission();
 		String deviceType = null, regId = null;
-		DateTime dt = null;//TODO: add redis checking to avoid double post
+		DateTime dt = null;
 		try 
 		{
 			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes, false);
@@ -42,7 +43,6 @@ public class CreateShopServlet extends HttpServlet {
 			s.fullDescription = InputUtil.getNonEmptyString(request, "fullDescription");
 			s.district = InputUtil.getIntegerWithRange(request, "district", Config.WHOLE_HK, Config.NEW_TERRITORIES);
 			s.address = InputUtil.getNonEmptyString(request, "address");
-
 					
 			//optional fields
 			s.phone = InputUtil.getString(request, "phone", "");
@@ -61,7 +61,13 @@ public class CreateShopServlet extends HttpServlet {
 		
 		Helper h = Helper.getHelper(deviceType, regId);
 		s.helperId = h.id;
-		s.saveCreateShopRecord();
+
+		String authCode = EncryptUtil.generateRandomAuthCode();
+		int result = s.saveCreateShopSubmissionToRedis(s.helperId, dt, authCode);
+		if (result > 0)
+		{
+			//TODO: implement the server push to client for the authCode
+		}
 		
 		//no matter if the update success, always reply OK
 		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(s));

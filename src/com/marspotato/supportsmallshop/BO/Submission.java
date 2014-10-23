@@ -1,8 +1,12 @@
 package com.marspotato.supportsmallshop.BO;
 
 import org.apache.ibatis.session.SqlSession;
+import org.joda.time.DateTime;
+
+import redis.clients.jedis.Jedis;
 
 import com.google.gson.annotations.Expose;
+import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 public class Submission {
@@ -38,6 +42,31 @@ public class Submission {
 	public int longitude1000000; /* the value of longitude * 1000000, the Accuracy is ~0.1m */
 	@Expose
 	public String photoUrl;
+	
+	public static Submission getCreateShopSubmissionToRedis(String helperId, DateTime dt, String authCode)
+	{
+		String key = "create_shop_submission:" + helperId + ":" + Config.defaultDateTimeFormatter.print(dt) + ":" + authCode;
+		Jedis connection = ConnectionContainer.getRedisConnection();
+		String output = connection.get(key);
+		ConnectionContainer.returnRedisConnection(connection);
+		
+		if (output == null || output.isEmpty() )
+			return null;
+		else
+			return Config.redisGSON.fromJson(output, Submission.class);
+	}
+	public int saveCreateShopSubmissionToRedis(String helperId, DateTime dt, String authCode)
+	{
+		String key = "create_shop_submission:" + helperId + ":" + Config.defaultDateTimeFormatter.print(dt) + ":" + authCode;
+		Jedis connection = ConnectionContainer.getRedisConnection();
+		long result = connection.setnx(key, Config.redisGSON.toJson(this));
+		if (result != 0)
+			connection.expire(key, Config.VERIFICATION_PERIOD);
+		ConnectionContainer.returnRedisConnection(connection);
+		
+		return (int)result;
+	}
+	
 	
 	public void saveCreateShopRecord()
 	{

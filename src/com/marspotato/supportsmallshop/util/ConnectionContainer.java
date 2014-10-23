@@ -51,11 +51,11 @@ public final class ConnectionContainer {
 					try {
 						Context ctx = new InitialContext();
 						ctx = (Context) ctx.lookup("java:comp/env");
-						String redisPath = (String) ctx.lookup("supportsmallshop-redisPath");
-
+						String redisHost = (String) ctx.lookup("supportsmallshop-redisHost");
+						String redisPort = (String) ctx.lookup("supportsmallshop-redisPort");
+						
 						//not use sentinal as there is only one redis instance
-						pool = new JedisPool(new JedisPoolConfig(), redisPath);
-
+						pool = new JedisPool(new JedisPoolConfig(), redisHost, Integer.parseInt(redisPort));
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}

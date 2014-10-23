@@ -8,37 +8,43 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.marspotato.supportsmallshop.BO.Helper;
+import org.joda.time.DateTime;
+
+import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
 
-@WebServlet("/Helper")
-public class HelperServlet extends HttpServlet {
+@WebServlet("/AuthCode")
+public class AuthCodeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public HelperServlet() {
+    public AuthCodeServlet() {
         super();
     }
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
-		String id = null, oldRegId = null, newRegId = null, deviceType = null;
+		String regId = null, deviceType = null;
+		DateTime dt = null;
 		try 
 		{
-			id = InputUtil.getNonEmptyString(request, "id");
-			oldRegId = InputUtil.getNonEmptyString(request, "oldRegId");
-			newRegId = InputUtil.getNonEmptyString(request, "newRegId");
+			regId = InputUtil.getNonEmptyString(request, "regId");
 			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes, false);
+			dt = InputUtil.getMandatoryDateTime(request, "dt");
 		}
 		catch (Exception ex)
 		{
 			OutputUtil.response(response, HttpServletResponse.SC_BAD_REQUEST, "{Error : \""+ex.getMessage()+"\"}");
 			return;
 		}
-		Helper.updateHelperRegId(id, deviceType, newRegId, oldRegId);
+		String authCode = AuthCode.generateAuthCode(regId, deviceType, dt);
 		
-		//no matter if the update success, always reply OK
+		System.out.println("authCode = " + authCode);
+		
+		//TODO: send the authCode to client by GCM or apple message
+		//REMARK: the authCode should be encrypted before sending to client
+
 		OutputUtil.response(response, HttpServletResponse.SC_OK, "");
 	}
 }

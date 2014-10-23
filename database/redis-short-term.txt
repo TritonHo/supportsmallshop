@@ -1,6 +1,6 @@
-key create_shop_submission
+key auth_code
 {
-	pk: user_id + dt + auth_code
-	value: submission json
+	pk: authCode
+	value: regId + deviceType + dt + isUsed
 	expiration: 30 minutes
 }

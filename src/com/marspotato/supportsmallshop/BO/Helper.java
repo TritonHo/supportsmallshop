@@ -23,7 +23,6 @@ public class Helper {
 		this.regId = regId;
 	}
 	
-	//
 	public static Helper getHelper(String deviceType, String regId)
 	{
 		HashMap<String, String> h = new HashMap<String, String>();
@@ -34,7 +33,7 @@ public class Helper {
 		String id = null;
 		SqlSession session = ConnectionContainer.getDBConnection();
 		try {
-			id = UUID.randomUUID().toString();
+			id = session.selectOne("getHelperID", h);
 			if (id == null)
 			{
 				id = UUID.randomUUID().toString();

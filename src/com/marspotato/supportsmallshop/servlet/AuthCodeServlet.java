@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.EncryptUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -38,10 +39,10 @@ public class AuthCodeServlet extends HttpServlet {
 			OutputUtil.response(response, HttpServletResponse.SC_BAD_REQUEST, "{Error : \""+ex.getMessage()+"\"}");
 			return;
 		}
-		String authCode = AuthCode.generateAuthCode(regId, deviceType, dt);
+		AuthCode ac = AuthCode.generateAuthCode(regId, deviceType, dt);
 		
-		System.out.println("authCode = " + authCode);
-		
+		System.out.println("authCode = " + ac.code);
+		System.out.println("encrypted authCode = " + EncryptUtil.encrypt(ac.code) );
 		//TODO: send the authCode to client by GCM or apple message
 		//REMARK: the authCode should be encrypted before sending to client
 

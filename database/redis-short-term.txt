@@ -4,3 +4,12 @@ key auth_code
 	value: regId + deviceType + dt + isUsed
 	expiration: 30 minutes
 }
+
+key CreateShop
+{
+	pk: authCode
+	value: submissionId
+	expiration: 30 minutes
+	remarks: to handle the double POST request
+}
+

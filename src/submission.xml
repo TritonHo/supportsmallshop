@@ -17,4 +17,12 @@
 			#{openHours}, #{district}, #{address}, #{phone}, #{latitude1000000}, #{longitude1000000}, #{photoUrl}
 		)
 	</insert>
+	
+	<select id="getSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.Submission">
+		select id, helper_id as helperId, 
+		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  
+		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
+		from submission
+		where id = #{id}::uuid
+	</select>
 </mapper>

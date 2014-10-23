@@ -9,12 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.DateTime;
-
+import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.Submission;
 import com.marspotato.supportsmallshop.util.Config;
-import com.marspotato.supportsmallshop.util.EncryptUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -29,15 +27,13 @@ public class CreateShopServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
+		String code = null;
 		Submission s = new Submission();
-		String deviceType = null, regId = null;
-		DateTime dt = null;
 		try 
 		{
-			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes, false);
-			regId = InputUtil.getNonEmptyString(request, "regId");
-			dt = InputUtil.getMandatoryDateTime(request, "dt"); 
+			code = InputUtil.getEncryptedString(request, "code");
 			
+			s.id = UUID.randomUUID().toString();
 			//mandatory fields
 			s.name = InputUtil.getNonEmptyString(request, "name");
 			s.shopType = InputUtil.getStringInRange(request, "shopType", Config.shopTypes, false);
@@ -61,16 +57,30 @@ public class CreateShopServlet extends HttpServlet {
 			return;
 		}
 		
-		Helper h = Helper.getHelper(deviceType, regId);
-		s.helperId = h.id;
-
-		String authCode = UUID.randomUUID().toString();
-		int result = s.saveCreateShopSubmissionToRedis(s.helperId, dt, authCode);
-		if (result > 0)
+		AuthCode ac = AuthCode.getAuthCode(code);
+		if (ac == null)
 		{
-			System.out.println("authCode = " + EncryptUtil.encrypt(authCode) );
-			//TODO: implement the server push to client for the authCode
+			OutputUtil.response(response, HttpServletResponse.SC_UNAUTHORIZED, "");
+			return;
 		}
+		if (ac.registerUsage("CreateShop", s.id) == false)
+		{
+			//used action, try to get back the value
+			String id = ac.getUsageValue("CreateShop");
+			if (id != null)
+			{
+				s = Submission.getSubmission(id);
+				OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(s));
+				return;
+			}
+			else
+				OutputUtil.response(response, HttpServletResponse.SC_CONFLICT, "");
+		}
+		
+		//save the record into database
+		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
+		s.helperId = h.id;
+		s.saveCreateShopRecord();
 		
 		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(s));
 	}

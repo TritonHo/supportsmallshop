@@ -42,38 +42,20 @@ public class Submission {
 	public int longitude1000000; /* the value of longitude * 1000000, the Accuracy is ~0.1m */
 	@Expose
 	public String photoUrl;
-	
-	public static Submission getCreateShopSubmissionToRedis(String helperId, DateTime dt, String authCode)
-	{
-		String key = "create_shop_submission:" + helperId + ":" + Config.defaultDateTimeFormatter.print(dt) + ":" + authCode;
-		Jedis connection = ConnectionContainer.getRedisConnection();
-		String output = connection.get(key);
-		ConnectionContainer.returnRedisConnection(connection);
-		
-		if (output == null || output.isEmpty() )
-			return null;
-		else
-			return Config.redisGSON.fromJson(output, Submission.class);
-	}
-	public int saveCreateShopSubmissionToRedis(String helperId, DateTime dt, String authCode)
-	{
-		String key = "create_shop_submission:" + helperId + ":" + Config.defaultDateTimeFormatter.print(dt) + ":" + authCode;
-		Jedis connection = ConnectionContainer.getRedisConnection();
-		long result = connection.setnx(key, Config.redisGSON.toJson(this));
-		if (result != 0)
-			connection.expire(key, Config.VERIFICATION_PERIOD);
-		ConnectionContainer.returnRedisConnection(connection);
-		
-		return (int)result;
-	}
-	
+
 	
 	public void saveCreateShopRecord()
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();
-		id = session.selectOne("generateUUID");
    		session.insert("saveCreateShopRecord", this);
 		session.commit();
 	}
-	
+	public static Submission getSubmission(String id)
+	{
+		SqlSession session = ConnectionContainer.getDBConnection();
+		Submission output = session.selectOne("getSubmission", id);
+		session.commit();
+		
+		return output;
+	}
 }

@@ -18,8 +18,18 @@ public class CreateUpdateShopResponseType {
 	@Expose
 	public boolean isAccept;
 
+	public static CreateUpdateShopResponseType getCreateUpdateShopResponseType(int id)
+	{
+		CreateUpdateShopResponseType output = null;
+		SqlSession session = ConnectionContainer.getDBConnection();
+		try {
+			output = session.selectOne("getCreateUpdateShopResponseType", id);
+		} finally {
+			session.close();
+		}
+		return output;
+	}
 	public static CreateUpdateShopResponseType[] getCreateUpdateShopResponseTypes()
-
 	{
 		List<CreateUpdateShopResponseType> records = null;
 		SqlSession session = ConnectionContainer.getDBConnection();

@@ -109,6 +109,9 @@ create table submission
 	shop_type shop_type not null,
 
 	/* promote the concurrency conflict */
+	reject_count integer not null default 0,
+	serious_reject_count integer not null default 0,
+	accept_count integer not null default 0,
 
     last_update_time timestamp not null default current_timestamp,
 

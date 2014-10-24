@@ -13,3 +13,11 @@ key CreateShop
 	remarks: to handle the double POST request
 }
 
+key CreateUpdateShopResponse
+{
+	pk: authCode
+	value: do not care
+	expiration: 30 minutes
+	remarks: to handle the double POST request
+}
+

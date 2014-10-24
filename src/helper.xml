@@ -19,4 +19,10 @@
 		set reg_id = #{newRegId,javaType=String}
 		where id = #{id,javaType=String}::uuid and device_type = #{deviceType,javaType=String}::device_type and reg_id = #{oldRegId,javaType=String}
 	</update>
+	<update id="updateHelperLastUpdateTime" parameterType="String">
+		update helper 
+		set last_update_time = current_timestamp
+		where id = #{id,javaType=String}::uuid
+	</update>
+	
 </mapper>

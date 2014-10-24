@@ -20,6 +20,8 @@ import com.marspotato.supportsmallshop.util.OutputUtil;
 @WebServlet("/CreateShop")
 public class CreateShopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String pageActionName = "CreateShop";
+	
        
     public CreateShopServlet() {
         super();
@@ -63,18 +65,18 @@ public class CreateShopServlet extends HttpServlet {
 			OutputUtil.response(response, HttpServletResponse.SC_UNAUTHORIZED, "");
 			return;
 		}
-		if (ac.registerUsage("CreateShop", s.id) == false)
+		if (ac.registerUsage(pageActionName, s.id) == false)
 		{
 			//used action, try to get back the value
-			String id = ac.getUsageValue("CreateShop");
+			String id = ac.getUsageValue(pageActionName);
 			if (id != null)
 			{
 				s = Submission.getSubmission(id);
 				OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(s));
-				return;
 			}
 			else
 				OutputUtil.response(response, HttpServletResponse.SC_CONFLICT, "");
+			return;
 		}
 		
 		//save the record into database

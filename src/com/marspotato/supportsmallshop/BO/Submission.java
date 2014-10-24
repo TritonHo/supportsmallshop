@@ -1,15 +1,16 @@
 package com.marspotato.supportsmallshop.BO;
 
-import org.apache.ibatis.session.SqlSession;
-import org.joda.time.DateTime;
+import java.util.HashMap;
 
-import redis.clients.jedis.Jedis;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.google.gson.annotations.Expose;
-import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 public class Submission {
+	
 	@Expose
 	public String id;
 	@Expose
@@ -43,19 +44,54 @@ public class Submission {
 	@Expose
 	public String photoUrl;
 
-	
+	public int processRequest(CreateUpdateShopResponseType type, String helperId)
+	{
+		int step = 0;
+		SqlSession session = ConnectionContainer.getDBConnection();
+		try
+		{
+	   		session.insert("saveCreateUpdateShopResponseRecord", new CreateUpdateShopResponse(this.id, helperId, type.id));
+	   		step = 1;
+			HashMap<String, Object> h = new HashMap<String, Object>();
+			h.put("rejectIncrement", type.isReject?1:0 );
+			h.put("seriousRejectIncrement", type.isSeriousReject?1:0 );
+			h.put("acceptIncrement", type.isAccept?1:0 );
+			h.put("id", this.id);
+			session.update("increaseResponseCount", h);
+	   		step = 2;
+	   		session.update("updateHelperLastUpdateTime", helperId);
+			session.commit();
+		}
+		catch (Exception ex)
+		{
+			if (step == 0)
+				//there is checking on Submission record, 
+				//thus if fail on this step, Must be caused by duplicate PK problem
+				return HttpServletResponse.SC_FORBIDDEN;
+			else
+				//some strange server error
+				return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+		}
+		finally
+		{
+			session.close();
+		}
+		//TODO: handle the create new shop and merge shop record
+		return HttpServletResponse.SC_OK;
+	}
 	public void saveCreateShopRecord()
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();
    		session.insert("saveCreateShopRecord", this);
 		session.commit();
+		session.close();
 	}
 	public static Submission getSubmission(String id)
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();
 		Submission output = session.selectOne("getSubmission", id);
 		session.commit();
-		
+		session.close();
 		return output;
 	}
 }

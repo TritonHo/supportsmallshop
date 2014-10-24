@@ -49,7 +49,19 @@ public class InputUtil {
 		
 		return output;
 	}
-
+	public static int getInteger(HttpServletRequest r, String fieldName) throws Exception 
+	{
+		int output = -1;
+		try
+		{
+			output = Integer.parseInt(r.getParameter(fieldName));
+		}
+		catch (Exception ex)
+		{
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		}
+		return output;
+	}
 	public static int getIntegerWithRange(HttpServletRequest r, String fieldName, int minValue, int maxValue) throws Exception 
 	{
 		int output = -1;

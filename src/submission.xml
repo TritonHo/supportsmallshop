@@ -27,7 +27,7 @@
 	</select>
 	
 	<insert id="saveCreateUpdateShopResponseRecord" parameterType="com.marspotato.supportsmallshop.BO.CreateUpdateShopResponse">
-		insert into submission(	submission_id, helper_id, response )
+		insert into submission_response(submission_id, helper_id, response )
 		values (#{submissionId}::uuid, #{helperId}::uuid, #{responseId})
 	</insert>
 	
@@ -36,6 +36,6 @@
 		set reject_count = reject_count + #{rejectIncrement,javaType=int},
 		serious_reject_count = serious_reject_count + #{seriousRejectIncrement,javaType=int},
 		accept_count = accept_count + #{acceptIncrement,javaType=int}
-		where id = #{acceptIncrement,javaType=String}::uuid
+		where id = #{id,javaType=String}::uuid
 	</update>
 </mapper>

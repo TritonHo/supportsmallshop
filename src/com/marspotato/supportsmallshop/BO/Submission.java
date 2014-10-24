@@ -69,8 +69,11 @@ public class Submission {
 				//thus if fail on this step, Must be caused by duplicate PK problem
 				return HttpServletResponse.SC_FORBIDDEN;
 			else
+			{
+				ex.printStackTrace();
 				//some strange server error
 				return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+			}
 		}
 		finally
 		{

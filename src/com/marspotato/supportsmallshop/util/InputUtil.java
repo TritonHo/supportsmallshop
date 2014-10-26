@@ -76,6 +76,37 @@ public class InputUtil {
 		}
 		return output;
 	}
+	public static int getIntegerInEnumWithDefaultValue(HttpServletRequest r, String fieldName, int[] enumArray, int defaultValue)
+	{
+		int output = defaultValue;
+		try {
+			output = getIntegerInEnum(r, fieldName, enumArray);
+		} catch (Exception e) {
+			//nothing to handle
+		}
+		return output;
+	}
+	public static int getIntegerInEnum(HttpServletRequest r, String fieldName, int[] enumArray) throws Exception 
+	{
+		int output = -1;
+		try
+		{
+			output = Integer.parseInt(r.getParameter(fieldName));
+		}
+		catch (Exception ex)
+		{
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		}
+		boolean matched = false;
+		for (int i = 0; i < enumArray.length; i++)
+			if (output == enumArray[i])
+				matched = true;
+		
+		if (matched == false)
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
+		
+		return output;
+	}
 	public static int getIntegerWithRange(HttpServletRequest r, String fieldName, int minValue, int maxValue) throws Exception 
 	{
 		int output = -1;

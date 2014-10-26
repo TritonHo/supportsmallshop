@@ -66,7 +66,7 @@ public class Shop {
 				h.put("searchWord", searchWord);
 			if (shopType != null && shopType.isEmpty() == false)
 				h.put("shopType", shopType);
-			if (district == Config.HK_ISLAND || district == Config.KOWL0ON || district == Config.NEW_TERRITORIES)
+			if (district != Config.WHOLE_HK)
 				h.put("district", district);
 			
 			shops = session.selectList("getShops", h);

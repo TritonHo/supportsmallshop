@@ -3,16 +3,6 @@ package com.marspotato.supportsmallshop.servlet;
 
 import java.io.IOException;
 
-
-
-
-
-
-
-
-
-
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,7 +38,7 @@ public class ShopServlet extends HttpServlet {
 		int latitude1000000 = InputUtil.getIntegerWithDefaultValue(request, "latitude1000000", 0);
 		int longitude1000000 = InputUtil.getIntegerWithDefaultValue(request, "longitude1000000", 0);
 		double range = InputUtil.getDoubleWithDefaultValue(request, "range", -1);
-		int district = InputUtil.getIntegerWithDefaultValue(request, "district", -1);
+		int district = InputUtil.getIntegerInEnumWithDefaultValue(request, "district", Config.districtType, Config.WHOLE_HK);
 		
 		Shop[] shops = Shop.getShops(searchWord, latitude1000000, longitude1000000, range, district, shopType);
 		OutputUtil.response(response, HttpServletResponse.SC_OK , Config.defaultGSON.toJson(shops));

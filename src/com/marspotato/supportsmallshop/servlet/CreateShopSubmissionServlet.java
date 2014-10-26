@@ -27,17 +27,6 @@ public class CreateShopSubmissionServlet extends HttpServlet {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		boolean getLatest = InputUtil.getBoolean(request, "getLatest", false);
-		String searchWord = InputUtil.getString(request, "searchWord", "");
-		String shopType = InputUtil.getStringInRangeAllowNull(request, "shopType", Config.shopTypes);
-		double range = InputUtil.getDoubleWithDefaultValue(request, "range", -1);
-		int district = InputUtil.getIntegerWithDefaultValue(request, "district", -1);
-		
-		
-		
-	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		String code = null;
@@ -52,7 +41,7 @@ public class CreateShopSubmissionServlet extends HttpServlet {
 			s.shopType = InputUtil.getStringInRange(request, "shopType", Config.shopTypes);
 			s.shortDescription = InputUtil.getNonEmptyString(request, "shortDescription");
 			s.fullDescription = InputUtil.getNonEmptyString(request, "fullDescription");
-			s.district = InputUtil.getIntegerWithRange(request, "district", Config.WHOLE_HK, Config.NEW_TERRITORIES);
+			s.district = InputUtil.getIntegerInEnum(request, "district", Config.districtType);
 			s.address = InputUtil.getNonEmptyString(request, "address");
 					
 			//optional fields

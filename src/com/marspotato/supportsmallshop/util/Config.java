@@ -15,6 +15,8 @@ public class Config {
 	public final static int KOWL0ON = 2;	
 	public final static int NEW_TERRITORIES = 3;
 	
+	public final static int[] districtType = new int[]{WHOLE_HK, HK_ISLAND, KOWL0ON, NEW_TERRITORIES};
+	
 	//if a submission get (ACCEPT - REJECT - SERIOUS_REJECT) >= 3, 
 	//the submission will be accepted and merged into production 
 	public final static int ACCEPT_SUBMISSION_THRESHOLD = 3;

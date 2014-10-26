@@ -18,12 +18,12 @@ import com.marspotato.supportsmallshop.util.OutputUtil;
 
 
 @WebServlet("/CreateShopSubmission")
-public class CreateShopServlet extends HttpServlet {
+public class CreateShopSubmissionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String pageActionName = "CreateShop";
 	
        
-    public CreateShopServlet() {
+    public CreateShopSubmissionServlet() {
         super();
     }
 

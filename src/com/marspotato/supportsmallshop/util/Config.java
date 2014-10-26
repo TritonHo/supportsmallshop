@@ -25,11 +25,15 @@ public class Config {
 	//the submission will be rejected
 	public final static int REJECT_SUBMISSION_THRESHOLD = 2;
 	
-	
 	//the period that a record will wait for gcm verification
 	public final static int VERIFICATION_PERIOD = 30 * 60; // 30 minutes
 	
+	//the max number of shop record that will output in listing mode
+	public final static int MAX_SHOP_RECORD_LIMIT = 100;
 	
+	//the max number of shop record that will output in listing mode
+	public final static int MAX_CREATE_UPDATE_SUBMISSION_RECORD_LIMIT = 80;
+	public final static int MAX_REMOVAL_SUBMISSION_RECORD_LIMIT = 20;
 	
 	public final static String[] shopTypes = new String[]{"食肆", "零售（食物）","零售（其他）", "服務"}; 
 	public final static String[] deviceTypes = new String[]{"ios", "google-android"}; 

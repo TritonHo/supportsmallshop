@@ -19,13 +19,47 @@
 	</insert>
 	
 	<select id="getSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.Submission">
-		select id, helper_id as helperId, 
+		select id, helper_id as helperId, shop_id as shopId,
 		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  
 		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
 		reject_count as rejectCount, serious_reject_count as seriousRejectCount, accept_count as acceptCount, is_processed as isProcessed
 		from submission
 		where id = #{id}::uuid
 	</select>
+	
+	<select id="getSubmissions" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.Submission">
+		select s.id, s.helper_id as helperId, shop_id as shopId,
+		s.name, s.short_description as shortDescription, s.full_description as fullDescription, s.search_tags as searchTags, s.shop_type as shopType,  
+		s.open_hours as openHours, s.district, s.address, s.phone, s.latitude1000000, s.longitude1000000, s.photo_url as photoUrl
+		from submission s
+		left join shop on s.shop_id = shop.id
+		where is_processed = false
+		<if test="searchWord != null">
+			and (
+				s.search_tags like '%' || #{searchWord,javaType=String} || '%'
+				or s.name like '%' || #{searchWord,javaType=String} || '%'
+				or s.short_description like '%' || #{searchWord,javaType=String} || '%'
+				or s.full_description like '%' || #{searchWord,javaType=String} || '%'
+				or s.address like '%' || #{searchWord,javaType=String} || '%'
+				or s.phone like '%' || #{searchWord,javaType=String} || '%'
+				
+				or shop.search_tags like '%' || #{searchWord,javaType=String} || '%'
+				or shop.name like '%' || #{searchWord,javaType=String} || '%'
+				or shop.short_description like '%' || #{searchWord,javaType=String} || '%'
+				or shop.full_description like '%' || #{searchWord,javaType=String} || '%'
+				or shop.address like '%' || #{searchWord,javaType=String} || '%'
+				or shop.phone like '%' || #{searchWord,javaType=String} || '%'
+			)
+		</if>
+		<if test="district != null">
+			and (s.district = #{district,javaType=int} or shop.district = #{district,javaType=int} )
+		</if>
+		<if test="shopType != null">
+			and (s.shop_type = #{shopType,javaType=String}::shop_type or shop.shop_type = #{shopType,javaType=String}::shop_type )
+		</if>
+		ORDER BY random() LIMIT #{MAX_CREATE_UPDATE_SUBMISSION_RECORD_LIMIT,javaType=int}
+	</select>
+
 	
 	<insert id="saveCreateUpdateShopResponseRecord" parameterType="com.marspotato.supportsmallshop.BO.CreateUpdateShopResponse">
 		insert into submission_response(submission_id, helper_id, response )

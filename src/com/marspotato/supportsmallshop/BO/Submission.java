@@ -1,8 +1,8 @@
 package com.marspotato.supportsmallshop.BO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
@@ -163,6 +163,31 @@ public class Submission {
 		Submission output = session.selectOne("getSubmission", id);
 		session.commit();
 		session.close();
+		return output;
+	}
+
+	public static Submission[] getSubmissions(String searchWord, int district, String shopType, boolean getLatest) {
+		List<Submission> submissions = null;
+		SqlSession session = ConnectionContainer.getDBConnection();
+		try {
+			HashMap<String, Object> h = new HashMap<String, Object>();
+			h.put("MAX_CREATE_UPDATE_SUBMISSION_RECORD_LIMIT", Config.MAX_CREATE_UPDATE_SUBMISSION_RECORD_LIMIT);
+			if (getLatest == true)
+				h.put("getLatest", getLatest);
+			if (searchWord != null && searchWord.isEmpty() == false)
+				h.put("searchWord", searchWord);
+			if (shopType != null && shopType.isEmpty() == false)
+				h.put("shopType", shopType);
+			if (district != Config.WHOLE_HK)
+				h.put("district", district);
+			
+			submissions = session.selectList("getSubmissions", h);
+		} finally {
+			session.close();
+		}
+
+		Submission[] output = new Submission[submissions.size()];
+		submissions.toArray(output);
 		return output;
 	}
 }

@@ -33,6 +33,7 @@
 		<if test="shopType != null">
 			and shop_type = #{shopType,javaType=String}::shop_type
 		</if>
+		ORDER BY random() LIMIT #{MAX_SHOP_RECORD_LIMIT,javaType=int}
 	</select>
 	
 	<insert id="createNewShopFromSubmission" parameterType="hashmap">

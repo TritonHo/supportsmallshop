@@ -55,6 +55,7 @@ public class Shop {
 		SqlSession session = ConnectionContainer.getDBConnection();
 		try {
 			HashMap<String, Object> h = new HashMap<String, Object>();
+			h.put("MAX_SHOP_RECORD_LIMIT", Config.MAX_SHOP_RECORD_LIMIT);
 			if (searchRange > 0)
 			{
 				AreaBlock[] areaBlocks = AreaBlock.getInvolvedAreaBlock(latitude1000000, longitude1000000, searchRange);

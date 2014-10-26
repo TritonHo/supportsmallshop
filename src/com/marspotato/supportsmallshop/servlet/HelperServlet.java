@@ -29,7 +29,7 @@ public class HelperServlet extends HttpServlet {
 			id = InputUtil.getNonEmptyString(request, "id");
 			oldRegId = InputUtil.getNonEmptyString(request, "oldRegId");
 			newRegId = InputUtil.getNonEmptyString(request, "newRegId");
-			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes, false);
+			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes);
 		}
 		catch (Exception ex)
 		{

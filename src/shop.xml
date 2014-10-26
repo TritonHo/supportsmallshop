@@ -34,4 +34,40 @@
 			and shop_type = #{shopType,javaType=String}::shop_type
 		</if>
 	</select>
+	
+	<insert id="createNewShopFromSubmission" parameterType="hashmap">
+		insert into shop
+		(
+			id, name, short_description, full_description, search_tags, shop_type,
+			open_hours, district, address, phone, photo_url,
+			latitude1000, longitude1000, latitude1000000, longitude1000000
+		)
+		select #{shopId,javaType=String}::uuid, name, short_description, full_description, search_tags, shop_type,  
+		open_hours, district, address, phone, photo_url,
+		latitude1000000 / 1000::integer, longitude1000000 / 1000::integer, latitude1000000, longitude1000000
+		from submission
+		where id = #{id,javaType=String}::uuid
+	</insert>
+	
+	<update id="mergeShopWithSubmission" parameterType="String">
+		update shop 
+		set 
+		name                 = coalesce(submission.name, shop.name),
+		short_description    = coalesce(submission.short_description   , shop.short_description   ),
+		full_description     = coalesce(submission.full_description    , shop.full_description    ),
+		search_tags          = coalesce(submission.search_tags         , shop.search_tags         ),
+		shop_type            = coalesce(submission.shop_type           , shop.shop_type           ),
+		open_hours           = coalesce(submission.open_hours          , shop.open_hours          ),
+		district             = coalesce(submission.district            , shop.district            ),
+		address              = coalesce(submission.address             , shop.address             ),
+		phone                = coalesce(submission.phone               , shop.phone               ),
+		photo_url			 = coalesce(submission.photo_url           , shop.photo_url           ),
+		latitude1000000      = coalesce(submission.latitude1000000     , shop.latitude1000000     ),
+		longitude1000000     = coalesce(submission.longitude1000000    , shop.longitude1000000    ),
+		latitude1000         = (case when submission.latitude1000000 is not null then submission.latitude1000000 / 1000::integer else shop.latitude1000 end),
+		longitude1000        = (case when submission.longitude1000000 is not null then submission.longitude1000000 / 1000::integer else shop.longitude1000 end)
+		FROM submission
+		where submission.id = #{id,javaType=String}::uuid
+		and shop.id = submission.shop_id
+	</update>
 </mapper>

@@ -21,7 +21,8 @@
 	<select id="getSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.Submission">
 		select id, helper_id as helperId, 
 		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  
-		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
+		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
+		reject_count as rejectCount, serious_reject_count as seriousRejectCount, accept_count as acceptCount, is_processed as isProcessed
 		from submission
 		where id = #{id}::uuid
 	</select>
@@ -31,11 +32,15 @@
 		values (#{submissionId}::uuid, #{helperId}::uuid, #{responseId})
 	</insert>
 	
-	<update id="increaseResponseCount" parameterType="hashmap">
+	<update id="updateSubmission" parameterType="hashmap">
 		update submission
 		set reject_count = reject_count + #{rejectIncrement,javaType=int},
 		serious_reject_count = serious_reject_count + #{seriousRejectIncrement,javaType=int},
-		accept_count = accept_count + #{acceptIncrement,javaType=int}
-		where id = #{id,javaType=String}::uuid
+		accept_count = accept_count + #{acceptIncrement,javaType=int},
+		<if test="isProcessed != null">
+			is_processed = true,
+		</if>
+		last_update_time = current_timestamp
+		where id = #{id,javaType=String}::uuid and is_processed = false
 	</update>
 </mapper>

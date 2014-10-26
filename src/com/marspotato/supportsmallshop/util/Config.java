@@ -15,8 +15,19 @@ public class Config {
 	public final static int KOWL0ON = 2;	
 	public final static int NEW_TERRITORIES = 3;
 	
+	//if a submission get (ACCEPT - REJECT - SERIOUS_REJECT) >= 3, 
+	//the submission will be accepted and merged into production 
+	public final static int ACCEPT_SUBMISSION_THRESHOLD = 3;
+	
+	//if a submission get (REJECT + SERIOUS_REJECT - ACCEPT) >= 2, 
+	//the submission will be rejected
+	public final static int REJECT_SUBMISSION_THRESHOLD = 2;
+	
+	
 	//the period that a record will wait for gcm verification
 	public final static int VERIFICATION_PERIOD = 30 * 60; // 30 minutes
+	
+	
 	
 	public final static String[] shopTypes = new String[]{"食肆", "零售（食物）","零售（其他）", "服務"}; 
 	public final static String[] deviceTypes = new String[]{"ios", "google-android"}; 

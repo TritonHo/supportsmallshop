@@ -31,7 +31,7 @@ public class AuthCodeServlet extends HttpServlet {
 		try 
 		{
 			regId = InputUtil.getNonEmptyString(request, "regId");
-			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes, false);
+			deviceType = InputUtil.getStringInRange(request, "deviceType", Config.deviceTypes);
 			dt = InputUtil.getMandatoryDateTime(request, "dt");
 		}
 		catch (Exception ex)

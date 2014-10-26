@@ -10,11 +10,25 @@ public class InputUtil {
 		String output = r.getParameter(fieldName);
 		return output!=null?output:defaultValue;
 	}
-	public static String getStringInRange(HttpServletRequest r, String fieldName, String[] ranges, boolean allowNull) throws Exception 
+
+	public static String getStringInRangeAllowNull(HttpServletRequest r, String fieldName, String[] ranges)
+	{
+		String output = null;
+		try
+		{
+			output = getStringInRange(r, fieldName, ranges);
+		}
+		catch (Exception ex)
+		{
+			//nothing to handle
+		}
+		
+		return output;
+	}
+	
+	public static String getStringInRange(HttpServletRequest r, String fieldName, String[] ranges) throws Exception 
 	{
 		String output = r.getParameter(fieldName);
-		if (allowNull == true && output == null)
-			return output;
 		
 		boolean matched = false;
 		for (int i = 0; i < ranges.length; i++)
@@ -116,6 +130,15 @@ public class InputUtil {
 			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
 		}
 		return output;
+	}
+	public static boolean getBoolean(HttpServletRequest r, String fieldName, boolean defaultValue)
+	{
+		String output = r.getParameter(fieldName);
+		if (output == null || output.isEmpty())
+			return defaultValue;
+		if ("0".equals(output) == false && "1".equals(output) == false)
+			return defaultValue;
+		return "1".equals(output);
 	}
 	public static boolean getMandatoryBoolean(HttpServletRequest r, String fieldName)throws Exception
 	{

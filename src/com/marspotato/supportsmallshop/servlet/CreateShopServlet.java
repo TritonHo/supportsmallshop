@@ -17,7 +17,7 @@ import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
 
-@WebServlet("/CreateShop")
+@WebServlet("/CreateShopSubmission")
 public class CreateShopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String pageActionName = "CreateShop";
@@ -27,6 +27,17 @@ public class CreateShopServlet extends HttpServlet {
         super();
     }
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		boolean getLatest = InputUtil.getBoolean(request, "getLatest", false);
+		String searchWord = InputUtil.getString(request, "searchWord", "");
+		String shopType = InputUtil.getStringInRangeAllowNull(request, "shopType", Config.shopTypes);
+		double range = InputUtil.getDoubleWithDefaultValue(request, "range", -1);
+		int district = InputUtil.getIntegerWithDefaultValue(request, "district", -1);
+		
+		
+		
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		String code = null;
@@ -38,7 +49,7 @@ public class CreateShopServlet extends HttpServlet {
 			s.id = UUID.randomUUID().toString();
 			//mandatory fields
 			s.name = InputUtil.getNonEmptyString(request, "name");
-			s.shopType = InputUtil.getStringInRange(request, "shopType", Config.shopTypes, false);
+			s.shopType = InputUtil.getStringInRange(request, "shopType", Config.shopTypes);
 			s.shortDescription = InputUtil.getNonEmptyString(request, "shortDescription");
 			s.fullDescription = InputUtil.getNonEmptyString(request, "fullDescription");
 			s.district = InputUtil.getIntegerWithRange(request, "district", Config.WHOLE_HK, Config.NEW_TERRITORIES);

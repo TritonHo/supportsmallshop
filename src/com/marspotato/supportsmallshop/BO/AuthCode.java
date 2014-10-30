@@ -8,6 +8,7 @@ import redis.clients.jedis.Jedis;
 
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.ConnectionContainer;
+import com.marspotato.supportsmallshop.util.EncryptUtil;
 
 public class AuthCode {
 	//remarks: this design cannot protect from cross-API concurrency problem
@@ -18,6 +19,19 @@ public class AuthCode {
 	public String deviceType;
 	public DateTime dt;
 	public boolean used;
+	
+	public void storeIntoRedisOutbox()
+	{
+		Jedis connection = ConnectionContainer.getRedisConnection();
+		if (deviceType.equals("google-android"))
+			connection.lpush("gcm_auth_code_list", "" + EncryptUtil.encrypt(code)+":"+regId);
+		else
+		{
+			//TODO: inplement the ios version
+		}
+		
+		ConnectionContainer.returnRedisConnection(connection);
+	}
 	
 	public String getUsageValue(String actionName)
 	{

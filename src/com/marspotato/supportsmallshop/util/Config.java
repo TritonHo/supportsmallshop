@@ -15,6 +15,9 @@ public class Config {
 	public final static int KOWL0ON = 2;	
 	public final static int NEW_TERRITORIES = 3;
 	
+	//in case no reply content, a dummy JSON to test if the mobile network get hijacked by WIFI provider 
+	public final static String dummyJson = "{ \"intColumn\": 123, \"stringColumn\": \"456\" }";
+	
 	public final static int[] districtType = new int[]{WHOLE_HK, HK_ISLAND, KOWL0ON, NEW_TERRITORIES};
 	
 	//if a submission get (ACCEPT - REJECT - SERIOUS_REJECT) >= 3, 

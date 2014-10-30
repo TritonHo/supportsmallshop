@@ -39,6 +39,6 @@ public class HelperServlet extends HttpServlet {
 		Helper.updateHelperRegId(id, deviceType, newRegId, oldRegId);
 		
 		//no matter if the update success, always reply OK
-		OutputUtil.response(response, HttpServletResponse.SC_OK, "");
+		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.dummyJson);
 	}
 }

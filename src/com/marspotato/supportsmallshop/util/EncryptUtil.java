@@ -1,7 +1,5 @@
 package com.marspotato.supportsmallshop.util;
 
-import java.util.UUID;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

@@ -5,6 +5,13 @@ key auth_code
 	expiration: 30 minutes
 }
 
+list gcm_auth_code_list
+{
+	pk: null
+	value: AuthCode + regId
+	it is a list to store outgoing GCM message
+}
+
 key CreateShop
 {
 	pk: authCode

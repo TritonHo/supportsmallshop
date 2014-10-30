@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 
 import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.util.Config;
-import com.marspotato.supportsmallshop.util.EncryptUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -26,6 +25,7 @@ public class AuthCodeServlet extends HttpServlet {
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
+		//TODO: consider the dt to handle double post
 		String regId = null, deviceType = null;
 		DateTime dt = null;
 		try 
@@ -40,12 +40,8 @@ public class AuthCodeServlet extends HttpServlet {
 			return;
 		}
 		AuthCode ac = AuthCode.generateAuthCode(regId, deviceType, dt);
-		
-		System.out.println("authCode = " + ac.code);
-		System.out.println("encrypted authCode = " + EncryptUtil.encrypt(ac.code) );
-		//TODO: send the authCode to client by GCM or apple message
-		//REMARK: the authCode should be encrypted before sending to client
+		ac.storeIntoRedisOutbox();
 
-		OutputUtil.response(response, HttpServletResponse.SC_OK, "");
+		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.dummyJson);
 	}
 }

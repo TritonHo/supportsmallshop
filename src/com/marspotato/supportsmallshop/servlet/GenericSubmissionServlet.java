@@ -9,22 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.marspotato.supportsmallshop.BO.ShopRemovalSubmission;
-import com.marspotato.supportsmallshop.BO.Submission;
-import com.marspotato.supportsmallshop.output.SubmissionOutput;
+import com.marspotato.supportsmallshop.BO.GenericSubmission;
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
 
-@WebServlet("/Submission")
-public class SubmissionServlet extends HttpServlet {
+@WebServlet("/GenericSubmission")
+public class GenericSubmissionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SubmissionServlet() {
+    public GenericSubmissionServlet() {
         super();
     }
 
@@ -39,11 +37,7 @@ public class SubmissionServlet extends HttpServlet {
 		String shopType = InputUtil.getStringInRangeAllowNull(request, "shopType", Config.shopTypes);
 		int district = InputUtil.getIntegerInEnumWithDefaultValue(request, "district", Config.districtType, Config.WHOLE_HK);
 		
-
-		SubmissionOutput output = new SubmissionOutput();
-		output.createUpdateSubmissionArray = Submission.getSubmissions(searchWord, district, shopType, getLatest);
-		//TODO: implement it
-		output.removalSubmissionArray = new ShopRemovalSubmission[0];
+		GenericSubmission[] output = GenericSubmission.getGenericSubmissions(searchWord, district, shopType, getLatest);
 		OutputUtil.response(response, HttpServletResponse.SC_OK , Config.defaultGSON.toJson(output));
 	}
 }

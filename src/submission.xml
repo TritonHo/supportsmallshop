@@ -26,11 +26,11 @@
 		from submission
 		where id = #{id}::uuid
 	</select>
-	
-	<select id="getSubmissions" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.Submission">
-		select s.id, s.helper_id as helperId, shop_id as shopId,
-		s.name, s.short_description as shortDescription, s.full_description as fullDescription, s.search_tags as searchTags, s.shop_type as shopType,  
-		s.open_hours as openHours, s.district, s.address, s.phone, s.latitude1000000, s.longitude1000000, s.photo_url as photoUrl
+
+	<select id="getCUGenericSubmissions" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.GenericSubmission">
+		select (case when s.shop_id is null then #{CREATE_TYPE,javaType=int} else #{UPDATE_TYPE,javaType=int} end) as submissionType, 
+		s.id as submissionId, 
+		coalesce(shop.name, s.name) as shopName, coalesce(shop.short_description, s.short_description) as shopShortDesc
 		from submission s
 		left join shop on s.shop_id = shop.id
 		where is_processed = false

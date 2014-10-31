@@ -40,6 +40,7 @@ func sendMessage(redisMessage string) {
 	load.AddRecipient(regId)
 
 	_, err := client.Send(load)
+
 	if err != nil {
 		log.Fatal("sendMessage gcm error: %s", err)
 	}
@@ -51,7 +52,7 @@ func main() {
 	if err != nil {
 		log.Panic("Cannot read /etc/supportsmallshop/redis.txt")
 	}
-	gcmKey, err := readLineFromFile("/etc/questionator/google_gcm_key.txt")
+	gcmKey, err := readLineFromFile("/etc/supportsmallshop/google_gcm_key.txt")
 	if err != nil {
 		log.Panic("Cannot read /etc/supportsmallshop/google_gcm_key.txt")
 	}
@@ -77,10 +78,11 @@ func main() {
 	//use blocking IO, while(1) loop
 	for {
 		message, err := redis.String(conn.Do("BRPOPLPUSH", `gcm_auth_code_list`, `gcm_auth_code_list_working`, 0))
+
 		if err != nil {
 			log.Fatal("problem on getting gcm_auth_code_list: %s", err)
 		}
 		sendMessage(message)
-		conn.Do("LPOP", `gcm_auth_code_list`)
+		conn.Do("LPOP", `gcm_auth_code_list_working`)
 	}
 }

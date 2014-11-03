@@ -18,6 +18,11 @@
 		)
 	</insert>
 	
+	<select id="getSubmissionReviewerCount" parameterType="hashmap" resultType="int">
+		select count(1) from submission_response 
+		where submission_id = #{id}::uuid and helper_id = #{helperId}::uuid
+	</select>
+	
 	<select id="getSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.Submission">
 		select id, helper_id as helperId, shop_id as shopId,
 		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  

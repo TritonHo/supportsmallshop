@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.Submission;
+import com.marspotato.supportsmallshop.output.SubmissionOutput;
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
@@ -26,7 +27,29 @@ public class CreateShopSubmissionServlet extends HttpServlet {
     public CreateShopSubmissionServlet() {
         super();
     }
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+    	String submissionId = null, helperId = "";
+    	try 
+		{
+			submissionId = InputUtil.getNonEmptyString(request, "submissionId");
+			helperId = InputUtil.getString(request, "helperId", "");
+		}
+		catch (Exception ex)
+		{
+			OutputUtil.response(response, HttpServletResponse.SC_BAD_REQUEST, "{Error : \""+ex.getMessage()+"\"}");
+			return;
+		}
+    	SubmissionOutput submissionOutput = new SubmissionOutput();
+    	submissionOutput.s = Submission.getSubmission(submissionId);
+    	submissionOutput.isCreator = submissionOutput.s.helperId.equals(helperId);
+    	submissionOutput.isReviewer = submissionOutput.s.isReviewer(helperId);
+    	
+    	if (submissionOutput.s.shopId != null)
+    		OutputUtil.response(response, HttpServletResponse.SC_BAD_REQUEST, "{Error : \"The Submission Type is invalid\"}");
+    	else
+    		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.defaultGSON.toJson(submissionOutput));
+    }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
 		String code = null;

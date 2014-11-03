@@ -2,6 +2,7 @@ package com.marspotato.supportsmallshop.BO;
 
 import java.util.HashMap;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
@@ -27,7 +28,6 @@ public class Submission {
 	
 	@Expose
 	public String id;
-	@Expose
 	public String helperId;
 	@Expose
 	public String shopId;
@@ -62,7 +62,22 @@ public class Submission {
 	public int seriousRejectCount;
 	public int acceptCount;
 	public boolean isProcessed;
-	
+
+	//check if the input helperId is one of the reviewer
+	public boolean isReviewer(String helperId)
+	{
+		if (helperId.isEmpty())
+			return false;
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		h.put("helperId", helperId);
+		h.put("id", this.id);
+		
+		SqlSession session = ConnectionContainer.getDBConnection();
+		int output = session.selectOne("getSubmissionReviewerCount", h);
+		session.close();
+		return output > 0;
+	}
+			
 	private void checkAndProcessSubmission(CreateUpdateShopResponseType type, SqlSession session)
 	{
 		//this implementation have slight concurrency issue that delay the execution of final processing of Submission

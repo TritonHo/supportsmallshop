@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.marspotato.supportsmallshop.BO.AuthCode;
+import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponse;
 import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponseType;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.Submission;
+import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -73,6 +75,7 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
 		}
 		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
 		int output = s.processRequest(type, h.id);
-		OutputUtil.response(response, output, "");
+		CreateUpdateShopResponse cusr = new CreateUpdateShopResponse(submissionId, h.id, type.id);
+		OutputUtil.response(response, output, Config.defaultGSON.toJson(cusr));
 	}
 }

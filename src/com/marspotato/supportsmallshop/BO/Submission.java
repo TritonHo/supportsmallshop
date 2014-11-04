@@ -1,17 +1,13 @@
 package com.marspotato.supportsmallshop.BO;
 
 import java.util.HashMap;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.google.gson.annotations.Expose;
 import com.marspotato.supportsmallshop.util.Config;
-import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
-public class Submission {
+public abstract class Submission {
 	/*
 		Rule for submission processing:
 		
@@ -28,9 +24,8 @@ public class Submission {
 	
 	@Expose
 	public String id;
-	public String helperId;
 	@Expose
-	public String shopId;
+	public String helperId;
 	
 	@Expose
 	public String name;
@@ -63,22 +58,10 @@ public class Submission {
 	public int acceptCount;
 	public boolean isProcessed;
 
-	//check if the input helperId is one of the reviewer
-	public boolean isReviewer(String helperId)
-	{
-		if (helperId.isEmpty())
-			return false;
-		HashMap<String, Object> h = new HashMap<String, Object>();
-		h.put("helperId", helperId);
-		h.put("id", this.id);
-		
-		SqlSession session = ConnectionContainer.getDBConnection();
-		int output = session.selectOne("getSubmissionReviewerCount", h);
-		session.close();
-		return output > 0;
-	}
-			
-	private void checkAndProcessSubmission(CreateUpdateShopResponseType type, SqlSession session)
+	public abstract void onAcceptAction(SqlSession session); 
+	
+	
+	public void checkAndProcessSubmission(CreateUpdateShopResponseType type, SqlSession session)
 	{
 		//this implementation have slight concurrency issue that delay the execution of final processing of Submission
 		//but still acceptable
@@ -116,79 +99,13 @@ public class Submission {
 			{
 				if (acceptDiff >= Config.ACCEPT_SUBMISSION_THRESHOLD)
 				{
-					if (this.shopId == null || shopId.isEmpty() == false)
-					{
-						HashMap<String, String> h1 = new HashMap<String, String>();
-						h1.put("id", this.id);
-						h1.put("shopId", UUID.randomUUID().toString());
-						session.insert("createNewShopFromSubmission", h1);
-					}
-					else
-						session.update("mergeShopWithSubmission", this.id);
+					onAcceptAction(session);
+					/*
+					 *  for update
+						session.update("mergeShopWithSubmission", id);
+*/
 				}
 			}
 		}	
 	}
-	public int processRequest(CreateUpdateShopResponseType type, String helperId)
-	{
-
-		int step = 0;
-		SqlSession session = ConnectionContainer.getDBConnection();
-		try
-		{
-	   		session.insert("saveCreateUpdateShopResponseRecord", new CreateUpdateShopResponse(this.id, helperId, type.id));
-	   		step = 1;
-	   		checkAndProcessSubmission(type, session);
-	   		step = 2;
-	   		session.update("updateHelperLastUpdateTime", helperId);
-		   	step = 3;
-			session.commit();
-		}
-		catch (Exception ex)
-		{
-			if (step == 0)
-				//there is checking on Submission record, 
-				//thus if fail on this step, Must be caused by duplicate PK problem
-				return HttpServletResponse.SC_FORBIDDEN;
-			else
-			{
-				ex.printStackTrace();
-				//some strange server error
-				return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-			}
-		}
-		finally
-		{
-			session.close();
-		}
-		return HttpServletResponse.SC_OK;
-	}
-	public void saveCreateShopRecord()
-	{
-		SqlSession session = ConnectionContainer.getDBConnection();
-		try
-		{
-	   		session.insert("saveCreateShopRecord", this);
-			session.commit();
-		}
-		finally
-		{
-			session.close();
-		}
-	}
-	public static Submission getSubmission(String id)
-	{
-		SqlSession session = ConnectionContainer.getDBConnection();
-		Submission output = null;
-		try
-		{
-			output = session.selectOne("getSubmission", id);
-		}
-		finally
-		{
-			session.close();
-		}
-		return output;
-	}
-
 }

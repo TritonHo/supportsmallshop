@@ -43,7 +43,7 @@
 		ORDER BY random() LIMIT #{MAX_SHOP_RECORD_LIMIT,javaType=int}
 	</select>
 	
-	<insert id="createNewShopFromSubmission" parameterType="hashmap">
+	<insert id="createNewShopFromSubmission" parameterType="String">
 		insert into shop
 		(
 			id, name, short_description, full_description, search_tags, shop_type,

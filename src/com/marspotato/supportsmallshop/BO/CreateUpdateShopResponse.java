@@ -1,12 +1,18 @@
 package com.marspotato.supportsmallshop.BO;
 
+import java.util.HashMap;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.google.gson.annotations.Expose;
+import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 
-public class CreateUpdateShopResponse {
+public class CreateUpdateShopResponse  {
 	@Expose
 	public String submissionId;
 	@Expose
@@ -21,10 +27,38 @@ public class CreateUpdateShopResponse {
 		this.responseId = responseId;
 	}
 	
-	public void saveCreateUpdateShopResponseRecord()
+	public int processRequest(CreateUpdateShopResponseType type, Submission submission)
 	{
+
+		int step = 0;
 		SqlSession session = ConnectionContainer.getDBConnection();
-   		session.insert("saveCreateUpdateShopResponseRecord", this);
-		session.commit();
+		try
+		{
+	   		session.insert("saveCreateUpdateShopResponseRecord", this);
+	   		step = 1;
+	   		submission.checkAndProcessSubmission(type, session);
+	   		step = 2;
+	   		session.update("updateHelperLastUpdateTime", helperId);
+		   	step = 3;
+			session.commit();
+		}
+		catch (Exception ex)
+		{
+			if (step == 0)
+				//there is checking on Submission record, 
+				//thus if fail on this step, Must be caused by duplicate PK problem
+				return HttpServletResponse.SC_FORBIDDEN;
+			else
+			{
+				ex.printStackTrace();
+				//some strange server error
+				return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+			}
+		}
+		finally
+		{
+			session.close();
+		}
+		return HttpServletResponse.SC_OK;
 	}
 }

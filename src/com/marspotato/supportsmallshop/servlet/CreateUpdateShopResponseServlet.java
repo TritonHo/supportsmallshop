@@ -12,7 +12,7 @@ import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponse;
 import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponseType;
 import com.marspotato.supportsmallshop.BO.Helper;
-import com.marspotato.supportsmallshop.BO.Submission;
+import com.marspotato.supportsmallshop.BO.CreateShopSubmission;
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
@@ -61,7 +61,7 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
 			return;
 		}
 		
-		Submission s = Submission.getSubmission(submissionId);
+		CreateShopSubmission s = CreateShopSubmission.getCreateShopSubmission(submissionId);
 		if (s == null)
 		{
 			OutputUtil.response(response, HttpServletResponse.SC_NOT_FOUND, "{Error : \"Submission ID not found\"}");
@@ -73,9 +73,12 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
 			OutputUtil.response(response, HttpServletResponse.SC_NOT_FOUND, "{Error : \"Response Type not found\"}");
 			return;
 		}
+		
+		
 		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
-		int output = s.processRequest(type, h.id);
 		CreateUpdateShopResponse cusr = new CreateUpdateShopResponse(submissionId, h.id, type.id);
+		int output = cusr.processRequest(type, s);
+
 		OutputUtil.response(response, output, Config.defaultGSON.toJson(cusr));
 	}
 }

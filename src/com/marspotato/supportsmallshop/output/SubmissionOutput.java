@@ -3,6 +3,7 @@ package com.marspotato.supportsmallshop.output;
 import java.io.Serializable;
 
 import com.google.gson.annotations.Expose;
+import com.marspotato.supportsmallshop.BO.Shop;
 import com.marspotato.supportsmallshop.BO.Submission;
 
 public class SubmissionOutput implements Serializable {
@@ -10,6 +11,8 @@ public class SubmissionOutput implements Serializable {
 	
 	@Expose
 	public Submission s;
+	@Expose
+	public Shop shop;
 	@Expose
 	public boolean isCreator;
 	@Expose

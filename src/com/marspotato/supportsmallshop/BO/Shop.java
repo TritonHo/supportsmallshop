@@ -47,9 +47,24 @@ public class Shop {
 		return distanceSquare <= Math.pow(rangeInDegree1000000, 2); 
 	}
 	
+	public static Shop getShopById(String id)
+	{
+		SqlSession session = ConnectionContainer.getDBConnection();
+		Shop shop = null;
+		try
+		{
+			 shop = session.selectOne("getShopById", id);
+		}
+		finally
+		{
+			session.close();
+		}
+		return shop;
+	}
+	
 	//if searchRange > 0, 
 	//	then eulerian distance between the shop location and the input location 
-	//	must be with in searchRange(measured in meter)    
+	//	must be with in searchRange(measured in meter)  
 	public static Shop[] getShops(String searchWord, int latitude1000000, int longitude1000000, double searchRange, int district, String shopType) {
 		List<Shop> shops = null;
 		SqlSession session = ConnectionContainer.getDBConnection();

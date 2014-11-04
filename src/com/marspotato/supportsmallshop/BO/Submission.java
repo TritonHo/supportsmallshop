@@ -166,16 +166,28 @@ public class Submission {
 	public void saveCreateShopRecord()
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();
-   		session.insert("saveCreateShopRecord", this);
-		session.commit();
-		session.close();
+		try
+		{
+	   		session.insert("saveCreateShopRecord", this);
+			session.commit();
+		}
+		finally
+		{
+			session.close();
+		}
 	}
 	public static Submission getSubmission(String id)
 	{
 		SqlSession session = ConnectionContainer.getDBConnection();
-		Submission output = session.selectOne("getSubmission", id);
-		session.commit();
-		session.close();
+		Submission output = null;
+		try
+		{
+			output = session.selectOne("getSubmission", id);
+		}
+		finally
+		{
+			session.close();
+		}
 		return output;
 	}
 

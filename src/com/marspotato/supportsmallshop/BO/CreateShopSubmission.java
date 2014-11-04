@@ -9,21 +9,7 @@ import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 public class CreateShopSubmission extends Submission{
 
-	//check if the input helperId is one of the reviewer
-	public boolean isReviewer(String helperId)
-	{
-		if (helperId.isEmpty())
-			return false;
-		HashMap<String, Object> h = new HashMap<String, Object>();
-		h.put("helperId", helperId);
-		h.put("id", this.id);
-		
-		SqlSession session = ConnectionContainer.getDBConnection();
-		int output = session.selectOne("getSubmissionReviewerCount", h);
-		session.close();
-		return output > 0;
-	}
-			
+
 	
 	public void saveCreateShopRecord()
 	{

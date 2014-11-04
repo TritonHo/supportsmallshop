@@ -3,13 +3,16 @@ package com.marspotato.supportsmallshop.output;
 import java.io.Serializable;
 
 import com.google.gson.annotations.Expose;
-import com.marspotato.supportsmallshop.BO.CreateShopSubmission;
+import com.marspotato.supportsmallshop.BO.Shop;
+import com.marspotato.supportsmallshop.BO.UpdateShopSubmission;
 
-public class CreateShopSubmissionOutput implements Serializable {
+public class UpdateShopSubmissionOutput implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Expose
-	public CreateShopSubmission s;
+	public UpdateShopSubmission s;
+	@Expose
+	public Shop shop;
 	@Expose
 	public boolean isCreator;
 	@Expose

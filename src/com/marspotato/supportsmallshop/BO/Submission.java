@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.google.gson.annotations.Expose;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 public abstract class Submission {
 	/*
@@ -98,14 +99,22 @@ public abstract class Submission {
 			else
 			{
 				if (acceptDiff >= Config.ACCEPT_SUBMISSION_THRESHOLD)
-				{
 					onAcceptAction(session);
-					/*
-					 *  for update
-						session.update("mergeShopWithSubmission", id);
-*/
-				}
 			}
 		}	
+	}
+	//check if the input helperId is one of the reviewer
+	public boolean isReviewer(String helperId)
+	{
+		if (helperId.isEmpty())
+			return false;
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		h.put("helperId", helperId);
+		h.put("id", this.id);
+		
+		SqlSession session = ConnectionContainer.getDBConnection();
+		int output = session.selectOne("getSubmissionReviewerCount", h);
+		session.close();
+		return output > 0;
 	}
 }

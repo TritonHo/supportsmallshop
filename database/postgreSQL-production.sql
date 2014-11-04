@@ -106,7 +106,7 @@ create table submission
 	longitude1000000 integer, /* the value of longitude * 1000000, the Accuracy is ~0.1m */
 
 	photo_url character varying(7), 
-	shop_type shop_type not null,
+	shop_type shop_type,
 
 	/* promote the concurrency conflict */
 	reject_count integer not null default 0,

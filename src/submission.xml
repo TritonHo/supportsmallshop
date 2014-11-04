@@ -17,6 +17,40 @@
 			#{openHours}, #{district}, #{address}, #{phone}, #{latitude1000000}, #{longitude1000000}, #{photoUrl}
 		)
 	</insert>
+	<insert id="saveUpdateShopRecord" parameterType="com.marspotato.supportsmallshop.BO.UpdateShopSubmission">
+		insert into submission
+		(
+			<if test="name != null"> name, </if>
+			<if test="shortDescription != null"> short_description, </if>
+			<if test="fullDescription != null"> full_description, </if>
+			<if test="searchTags != null"> search_tags, </if>
+			<if test="openHours != null"> open_hours, </if>
+			<if test="address != null"> address, </if>
+			<if test="phone != null"> phone, </if>
+			<if test="photoUrl != null"> photo_url, </if>
+
+			<if test="updateShopType == true"> shop_type, </if>
+			<if test="updateDistrict == true"> district, </if>
+			<if test="updateLocation == true"> latitude1000000, longitude1000000, </if>
+			id, helper_id, shop_id
+		)
+		values
+		(
+			<if test="name != null"> #{name}, </if>
+			<if test="shortDescription != null"> #{shortDescription}, </if>
+			<if test="fullDescription != null"> #{fullDescription}, </if>
+			<if test="searchTags != null"> #{searchTags}, </if>
+			<if test="openHours != null"> #{openHours}, </if>
+			<if test="address != null"> #{address}, </if>
+			<if test="phone != null"> #{phone}, </if>
+			<if test="photoUrl != null"> #{photoUrl}, </if>
+		
+			<if test="updateShopType == true"> #{shopType}::shop_type, </if>
+			<if test="updateDistrict == true"> #{district}, </if>
+			<if test="updateLocation == true"> #{latitude1000000}, #{longitude1000000}, </if>
+			#{id}::uuid, #{helperId}::uuid, #{shopId}::uuid
+		)
+	</insert>
 	
 	<select id="getSubmissionReviewerCount" parameterType="hashmap" resultType="int">
 		select count(1) from submission_response 
@@ -31,7 +65,14 @@
 		from submission
 		where id = #{id}::uuid and shop_id is null
 	</select>
-
+	<select id="getUpdateShopSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.UpdateShopSubmission">
+		select id, helper_id as helperId, shop_id as shopId,
+		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  
+		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
+		reject_count as rejectCount, serious_reject_count as seriousRejectCount, accept_count as acceptCount, is_processed as isProcessed
+		from submission
+		where id = #{id}::uuid and shop_id is not null
+	</select>
 	<select id="getCUGenericSubmissions" parameterType="hashmap" resultType="com.marspotato.supportsmallshop.BO.GenericSubmission">
 		select (case when s.shop_id is null then #{CREATE_TYPE,javaType=int} else #{UPDATE_TYPE,javaType=int} end) as submissionType, 
 		s.id as submissionId, 

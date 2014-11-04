@@ -42,6 +42,12 @@ public class CreateShopSubmissionServlet extends HttpServlet {
 		}
     	CreateShopSubmissionOutput output = new CreateShopSubmissionOutput();
     	output.s = CreateShopSubmission.getCreateShopSubmission(submissionId);
+    	if (output.s == null)
+    	{
+       		OutputUtil.response(response, HttpServletResponse.SC_NOT_FOUND, "");
+       		return;
+    	}
+    	
     	output.isCreator = output.s.helperId.equals(helperId);
     	output.isReviewer = output.s.isReviewer(helperId);
     	output.s.helperId = null;//maximum protection on privacy

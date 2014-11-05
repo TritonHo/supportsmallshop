@@ -69,6 +69,9 @@
 		select id, helper_id as helperId, shop_id as shopId,
 		name, short_description as shortDescription, full_description as fullDescription, search_tags as searchTags, shop_type as shopType,  
 		open_hours as openHours, district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
+		(shop_type is not null) as updateShopType,
+		(district is not null) as updateDistrict,
+		(latitude1000000 is not null and longitude1000000 is not null) as updateLocation,	
 		reject_count as rejectCount, serious_reject_count as seriousRejectCount, accept_count as acceptCount, is_processed as isProcessed
 		from submission
 		where id = #{id}::uuid and shop_id is not null

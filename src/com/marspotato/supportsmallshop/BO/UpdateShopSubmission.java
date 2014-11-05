@@ -8,8 +8,11 @@ import com.marspotato.supportsmallshop.util.ConnectionContainer;
 public class UpdateShopSubmission extends Submission{
 	@Expose
 	public String shopId;
+	@Expose
 	public boolean updateShopType;
+	@Expose
 	public boolean updateDistrict;
+	@Expose
 	public boolean updateLocation;
 
 	

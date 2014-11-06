@@ -13,6 +13,8 @@ import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponse;
 import com.marspotato.supportsmallshop.BO.CreateUpdateShopResponseType;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.CreateShopSubmission;
+import com.marspotato.supportsmallshop.BO.Submission;
+import com.marspotato.supportsmallshop.BO.UpdateShopSubmission;
 import com.marspotato.supportsmallshop.util.Config;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
@@ -28,12 +30,14 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		String submissionType = null;
 		String code = null;
 		String submissionId = null;
 		int responseTypeId = 0;
 
 		try 
 		{
+			submissionType = InputUtil.getStringInRange(request, "submissionType", new String[]{"create", "update"});
 			code = InputUtil.getEncryptedString(request, "code");
 			submissionId = InputUtil.getNonEmptyString(request, "submissionId");
 			responseTypeId = InputUtil.getInteger(request, "responseTypeId");
@@ -61,12 +65,17 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
 			return;
 		}
 		
-		CreateShopSubmission s = CreateShopSubmission.getCreateShopSubmission(submissionId);
+		Submission s = null;
+		if (submissionType.equals("create") )
+			s = CreateShopSubmission.getCreateShopSubmission(submissionId);
+		if (submissionType.equals("update") )
+			s = UpdateShopSubmission.getUpdateShopSubmission(submissionId);
 		if (s == null)
 		{
 			OutputUtil.response(response, HttpServletResponse.SC_NOT_FOUND, "{Error : \"Submission ID not found\"}");
 			return;
 		}
+		
 		CreateUpdateShopResponseType type = CreateUpdateShopResponseType.getCreateUpdateShopResponseType(responseTypeId);
 		if (type == null)
 		{

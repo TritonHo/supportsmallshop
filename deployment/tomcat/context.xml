@@ -38,4 +38,8 @@
 		driverClassName="org.postgresql.Driver"
 		url="jdbc:postgresql://localhost:5432/supportsmallshop" />
 
+	<Environment name="supportsmallshop-redisHost" value="localhost" type="java.lang.String" override="false" />
+	<Environment name="supportsmallshop-redisPort" value="6379" type="java.lang.String" override="false" />
+	<Environment name="supportsmallshop-currentEncryptionKey" value="abc12345" type="java.lang.String" override="false" />
+	<Environment name="supportsmallshop-oldEncryptionKey" value="abc12346" type="java.lang.String" override="false" />
 </Context>

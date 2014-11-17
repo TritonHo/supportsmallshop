@@ -17,6 +17,17 @@
 			#{openHours}, #{district}, #{address}, #{phone}, #{latitude1000000}, #{longitude1000000}, #{photoUrl}
 		)
 	</insert>
+	
+	<insert id="saveDeleteShopRecord" parameterType="com.marspotato.supportsmallshop.BO.DeleteShopSubmission">
+		insert into removal	
+		(
+			id, shop_id, helper_id, reason
+		)
+		values 
+		(
+			#{id}::uuid, #{shopId}::uuid, #{helperId}::uuid, #{reason}::removal_reason_type
+		)
+	</insert>
 	<insert id="saveUpdateShopRecord" parameterType="com.marspotato.supportsmallshop.BO.UpdateShopSubmission">
 		insert into submission
 		(
@@ -52,10 +63,17 @@
 		)
 	</insert>
 	
+	
+	<select id="getDeleteShopSubmissionReviewerCount" parameterType="hashmap" resultType="int">
+		select count(1) from removal_response 
+		where submission_id = #{id}::uuid and helper_id = #{helperId}::uuid
+	</select>
+	
 	<select id="getSubmissionReviewerCount" parameterType="hashmap" resultType="int">
 		select count(1) from submission_response 
 		where submission_id = #{id}::uuid and helper_id = #{helperId}::uuid
 	</select>
+	
 	
 	<select id="getCreateShopSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.CreateShopSubmission">
 		select id, helper_id as helperId,
@@ -64,6 +82,13 @@
 		reject_count as rejectCount, serious_reject_count as seriousRejectCount, accept_count as acceptCount, is_processed as isProcessed
 		from submission
 		where id = #{id}::uuid and shop_id is null
+	</select>
+	<select id="getDeleteShopSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.DeleteShopSubmission">
+		select id, helper_id as helperId, shop_id as shopId,
+		reason,
+		reject_count as rejectCount, accept_count as acceptCount, is_processed as isProcessed
+		from removal
+		where id = #{id}::uuid
 	</select>
 	<select id="getUpdateShopSubmission" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.UpdateShopSubmission">
 		select id, helper_id as helperId, shop_id as shopId,

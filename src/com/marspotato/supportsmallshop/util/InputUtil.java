@@ -29,6 +29,8 @@ public class InputUtil {
 	public static String getStringInRange(HttpServletRequest r, String fieldName, String[] ranges) throws Exception 
 	{
 		String output = r.getParameter(fieldName);
+		if (output == null)
+			throw new Exception("Parameter '" +fieldName+ "' is invalid" );
 		
 		boolean matched = false;
 		for (int i = 0; i < ranges.length; i++)

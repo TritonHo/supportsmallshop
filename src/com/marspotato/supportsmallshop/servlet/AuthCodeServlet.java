@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import com.marspotato.supportsmallshop.BO.AuthCode;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.EncryptUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -42,6 +43,9 @@ public class AuthCodeServlet extends HttpServlet {
 		AuthCode ac = AuthCode.generateAuthCode(regId, deviceType, dt);
 		ac.storeIntoRedisOutbox();
 
+		//for testing purpose, never uncomment it in production
+		//System.out.println(" EncryptUtil.encrypt(code) = " +  EncryptUtil.encrypt(ac.code));
+		
 		OutputUtil.response(response, HttpServletResponse.SC_OK, Config.dummyJson);
 	}
 }

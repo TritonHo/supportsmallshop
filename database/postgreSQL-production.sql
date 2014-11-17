@@ -45,6 +45,12 @@ create table removal
 	shop_id UUID not null,
 	helper_id UUID not null,
 	reason removal_reason_type not null,
+	/* promote the concurrency conflict */
+	reject_count integer not null default 0,
+	accept_count integer not null default 0,
+	is_processed boolean default false,
+
+    last_update_time timestamp not null default current_timestamp,
 	CONSTRAINT "removal_pk" PRIMARY KEY (id)
 );
 

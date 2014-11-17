@@ -27,7 +27,7 @@ public class AuthCode {
 			connection.lpush("gcm_auth_code_list", "" + EncryptUtil.encrypt(code)+":"+regId);
 		else
 		{
-			//TODO: inplement the ios version
+			//TODO: implement the ios version
 		}
 		
 		ConnectionContainer.returnRedisConnection(connection);

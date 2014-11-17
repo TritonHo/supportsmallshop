@@ -28,3 +28,20 @@ key CreateUpdateShopResponse
 	remarks: to handle the double POST request
 }
 
+key DeleteShop
+{
+	pk: authCode
+	value: submissionId
+	expiration: 30 minutes
+	remarks: to handle the double POST request
+}
+
+key UpdateShop
+{
+	pk: authCode
+	value: submissionId
+	expiration: 30 minutes
+	remarks: to handle the double POST request
+}
+
+

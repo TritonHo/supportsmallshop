@@ -56,10 +56,10 @@ create table removal
 
 create table removal_response
 (
-	id UUID,
+	removal_id UUID,
 	helper_id UUID,
 	is_accept boolean not null,/* accept or reject the removal */
-	CONSTRAINT "removal_response_pk" PRIMARY KEY (id)
+	CONSTRAINT "removal_response_pk" PRIMARY KEY (removal_id, helper_id)
 );
 
 create table shop
@@ -149,6 +149,9 @@ create table submission_response_type
 --foreign keys
 ALTER TABLE removal ADD CONSTRAINT removal_fk1 FOREIGN KEY (helper_id) REFERENCES helper(id) ON DELETE CASCADE;
 ALTER TABLE removal ADD CONSTRAINT removal_fk2 FOREIGN KEY (shop_id) REFERENCES shop(id) ON DELETE CASCADE;
+ALTER TABLE removal_response ADD CONSTRAINT removal_response_fk1 FOREIGN KEY (removal_id) REFERENCES removal(id) ON DELETE CASCADE;
+ALTER TABLE removal_response ADD CONSTRAINT removal_response_fk2 FOREIGN KEY (helper_id) REFERENCES helper(id) ON DELETE CASCADE;
+
 ALTER TABLE submission ADD CONSTRAINT submission_fk1 FOREIGN KEY (helper_id) REFERENCES helper(id) ON DELETE CASCADE;
 ALTER TABLE submission ADD CONSTRAINT submission_fk2 FOREIGN KEY (shop_id) REFERENCES shop(id) ON DELETE CASCADE;
 ALTER TABLE submission_response ADD CONSTRAINT submission_response_fk1 FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE;

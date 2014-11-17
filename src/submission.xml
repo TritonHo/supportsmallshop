@@ -139,11 +139,26 @@
 		insert into submission_response(submission_id, helper_id, response )
 		values (#{submissionId}::uuid, #{helperId}::uuid, #{responseId})
 	</insert>
+	<insert id="saveDeleteResponseRecord" parameterType="com.marspotato.supportsmallshop.BO.DeleteShopResponse">
+		insert into removal_response(removal_id, helper_id, is_accept)
+		values (#{removalId}::uuid, #{helperId}::uuid, #{isAccept})
+	</insert>
 	
 	<update id="updateSubmission" parameterType="hashmap">
 		update submission
 		set reject_count = reject_count + #{rejectIncrement,javaType=int},
 		serious_reject_count = serious_reject_count + #{seriousRejectIncrement,javaType=int},
+		accept_count = accept_count + #{acceptIncrement,javaType=int},
+		<if test="isProcessed != null">
+			is_processed = true,
+		</if>
+		last_update_time = current_timestamp
+		where id = #{id,javaType=String}::uuid and is_processed = false
+	</update>
+	
+	<update id="updateRemoval" parameterType="hashmap">
+		update removal
+		set reject_count = reject_count + #{rejectIncrement,javaType=int},
 		accept_count = accept_count + #{acceptIncrement,javaType=int},
 		<if test="isProcessed != null">
 			is_processed = true,

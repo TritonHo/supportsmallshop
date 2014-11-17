@@ -3,3 +3,5 @@
 2.	add maximum submission, max review submission count
 
 3.	add action on serious reject, blacklist
+
+4.	add trigger to moniter the shop record

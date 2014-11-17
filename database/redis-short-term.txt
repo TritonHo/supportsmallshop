@@ -36,6 +36,14 @@ key DeleteShop
 	remarks: to handle the double POST request
 }
 
+key DeleteShopResponse
+{
+	pk: authCode
+	value: do not care
+	expiration: 30 minutes
+	remarks: to handle the double POST request
+}
+
 key UpdateShop
 {
 	pk: authCode

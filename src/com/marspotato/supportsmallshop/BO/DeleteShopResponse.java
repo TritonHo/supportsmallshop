@@ -8,31 +8,31 @@ import com.google.gson.annotations.Expose;
 import com.marspotato.supportsmallshop.util.ConnectionContainer;
 
 
-public class CreateUpdateShopResponse  {
+public class DeleteShopResponse  {
 	@Expose
-	public String submissionId;
+	public String removalId;
 	@Expose
 	public String helperId;
 	@Expose
-	public int responseId;
+	public boolean isAccept;
 
-	public CreateUpdateShopResponse(String submissionId, String helperId, int responseId)
+	public DeleteShopResponse(String removalId, String helperId, boolean isAccept)
 	{
-		this.submissionId = submissionId;
+		this.removalId = removalId;
 		this.helperId = helperId;
-		this.responseId = responseId;
+		this.isAccept = isAccept;
 	}
 	
-	public int processRequest(CreateUpdateShopResponseType type, Submission submission)
+	public int processRequest(DeleteShopSubmission submission)
 	{
 
 		int step = 0;
 		SqlSession session = ConnectionContainer.getDBConnection();
 		try
 		{
-	   		session.insert("saveCreateUpdateShopResponseRecord", this);
+	   		session.insert("saveDeleteResponseRecord", this);
 	   		step = 1;
-	   		submission.checkAndProcessSubmission(type, session);
+	   		submission.checkAndProcessSubmission(isAccept, session);
 	   		step = 2;
 	   		session.update("updateHelperLastUpdateTime", helperId);
 		   	step = 3;

@@ -78,4 +78,8 @@
 		where submission.id = #{id,javaType=String}::uuid
 		and shop.id = submission.shop_id
 	</update>
+	<delete id="deleteShopWithSubmission" parameterType="String">
+		delete from shop 
+		where id = #{id,javaType=String}::uuid
+	</delete>
 </mapper>

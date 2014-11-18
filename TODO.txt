@@ -1,4 +1,4 @@
-1.	add Delete,
+1.	add Delete(done)
 
 2.	add maximum submission, max review submission count
 

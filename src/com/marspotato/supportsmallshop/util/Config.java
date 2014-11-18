@@ -28,6 +28,14 @@ public class Config {
 	//the submission will be rejected
 	public final static int REJECT_SUBMISSION_THRESHOLD = 2;
 	
+	//every 24 hours, one user can create/update/delete at most 5 shops 
+	public final static int MAX_SHOP_ACTION = 5;
+	public final static String SHOP_ACTION_COUNT = "shop_action_count";
+	
+	//every 24 hours, one user can review others at most 10 times 
+	public final static int MAX_REVIEW_ACTION = 10;
+	public final static String REVIEW_ACTION_COUNT = "review_action_count";
+	
 	//the period that a record will wait for gcm verification
 	public final static int VERIFICATION_PERIOD = 30 * 60; // 30 minutes
 	

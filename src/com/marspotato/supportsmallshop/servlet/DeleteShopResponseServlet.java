@@ -13,6 +13,7 @@ import com.marspotato.supportsmallshop.BO.DeleteShopResponse;
 import com.marspotato.supportsmallshop.BO.DeleteShopSubmission;
 import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.CounterUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -68,6 +69,11 @@ public class DeleteShopResponseServlet extends HttpServlet {
 		}
 		
 		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
+		if (CounterUtil.increaseReviewActionCount(h.id))
+		{
+			OutputUtil.response(response, HttpServletResponse.SC_FORBIDDEN, "");
+			return;
+		}
 		DeleteShopResponse dsr = new DeleteShopResponse(removalId, h.id, isAccept);
 		int output = dsr.processRequest(s);
 

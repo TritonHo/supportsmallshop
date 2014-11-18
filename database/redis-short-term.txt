@@ -12,6 +12,22 @@ list gcm_auth_code_list
 	it is a list to store outgoing GCM message
 }
 
+set shop_action_count
+{
+	pk: helper_id
+	member: create_date
+	Remarks: it is used for counting the total shop create/update/delete by the helper
+	expiration: 1 days
+}
+
+set review_action_count
+{
+	pk: helper_id
+	member: create_date
+	Remarks: it is used for counting the repsonse by the helper
+	expiration: 1 days
+}
+
 key CreateShop
 {
 	pk: authCode

@@ -43,7 +43,7 @@ public class DeleteShopResponse  {
 			if (step == 0)
 				//there is checking on Submission record, 
 				//thus if fail on this step, Must be caused by duplicate PK problem
-				return HttpServletResponse.SC_FORBIDDEN;
+				return HttpServletResponse.SC_OK;
 			else
 			{
 				ex.printStackTrace();

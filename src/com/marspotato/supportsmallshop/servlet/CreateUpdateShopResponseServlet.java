@@ -16,6 +16,7 @@ import com.marspotato.supportsmallshop.BO.CreateShopSubmission;
 import com.marspotato.supportsmallshop.BO.Submission;
 import com.marspotato.supportsmallshop.BO.UpdateShopSubmission;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.CounterUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -85,9 +86,14 @@ public class CreateUpdateShopResponseServlet extends HttpServlet {
 		
 		
 		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
+		if (CounterUtil.increaseReviewActionCount(h.id))
+		{
+			OutputUtil.response(response, HttpServletResponse.SC_FORBIDDEN, "");
+			return;
+		}
 		CreateUpdateShopResponse cusr = new CreateUpdateShopResponse(submissionId, h.id, type.id);
 		int output = cusr.processRequest(type, s);
-
+		
 		OutputUtil.response(response, output, Config.defaultGSON.toJson(cusr));
 	}
 }

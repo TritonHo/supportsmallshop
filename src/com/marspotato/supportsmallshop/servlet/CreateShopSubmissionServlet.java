@@ -14,6 +14,7 @@ import com.marspotato.supportsmallshop.BO.Helper;
 import com.marspotato.supportsmallshop.BO.CreateShopSubmission;
 import com.marspotato.supportsmallshop.output.CreateShopSubmissionOutput;
 import com.marspotato.supportsmallshop.util.Config;
+import com.marspotato.supportsmallshop.util.CounterUtil;
 import com.marspotato.supportsmallshop.util.InputUtil;
 import com.marspotato.supportsmallshop.util.OutputUtil;
 
@@ -105,9 +106,14 @@ public class CreateShopSubmissionServlet extends HttpServlet {
 				OutputUtil.response(response, HttpServletResponse.SC_CONFLICT, "");
 			return;
 		}
-		
+
 		//save the record into database
 		Helper h = Helper.getHelper(ac.deviceType, ac.regId);
+		if (CounterUtil.increaseShopActionCount(h.id))
+		{
+			OutputUtil.response(response, HttpServletResponse.SC_FORBIDDEN, "");
+			return;
+		}
 		s.helperId = h.id;
 		s.saveCreateShopRecord();
 		

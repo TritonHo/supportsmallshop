@@ -87,6 +87,7 @@ create table shop
 	photo_url character varying(7) not null default '',
 
 	shop_type shop_type not null,
+	is_deleted boolean not null default false,
 	CONSTRAINT "shop_pk" PRIMARY KEY (id)
 );
 CREATE INDEX shop_index1 ON shop (latitude1000, longitude1000);

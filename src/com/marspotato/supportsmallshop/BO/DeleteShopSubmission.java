@@ -97,6 +97,6 @@ public class DeleteShopSubmission {
 		
 		//if updateResult = 0, then there is concurrent update, and thus no need to process the submission
 		if (updateResult > 0 && isProcessed == true && acceptDiff >= Config.ACCEPT_SUBMISSION_THRESHOLD)
-			session.delete("deleteShopWithSubmission", this.shopId);
+			session.update("deleteShopWithSubmission", this.shopId);
 	}
 }

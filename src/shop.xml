@@ -16,7 +16,7 @@
 		search_tags as searchTags, open_hours as openHours, shop_type as shopType, 
 		district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
 		from shop
-		where 1=1 
+		where is_deleted = false
 		]]>
 		<if test="hasGeoSearch != null">
 			and (latitude1000, longitude1000) in
@@ -78,8 +78,9 @@
 		where submission.id = #{id,javaType=String}::uuid
 		and shop.id = submission.shop_id
 	</update>
-	<delete id="deleteShopWithSubmission" parameterType="String">
-		delete from shop 
+	<update id="deleteShopWithSubmission" parameterType="String">
+		update shop 
+		set is_deleted = true
 		where id = #{id,javaType=String}::uuid
-	</delete>
+	</update>
 </mapper>

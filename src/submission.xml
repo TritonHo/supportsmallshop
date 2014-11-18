@@ -106,7 +106,7 @@
 		s.id as submissionId, 
 		coalesce(shop.name, s.name) as shopName, coalesce(shop.short_description, s.short_description) as shopShortDesc
 		from submission s
-		left join shop on s.shop_id = shop.id
+		left join shop on s.shop_id = shop.id and shop.is_deleted = false
 		where is_processed = false
 		<if test="searchWord != null">
 			and (

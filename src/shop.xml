@@ -5,8 +5,9 @@
 <mapper namespace="Main">
 	<select id="getShopById" parameterType="String" resultType="com.marspotato.supportsmallshop.BO.Shop">
 		select id, name, short_description as shortDescription, full_description as fullDescription, 
-		search_tags as searchTags, open_hours as openHours, shop_type as shopType, 
-		district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
+		search_tags as searchTags, open_hours as openHours, shop_type as shopType,
+		district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
+		is_deleted as isDeleted
 		from shop
 		where id = #{id}::uuid
 	</select>
@@ -14,7 +15,8 @@
 		<![CDATA[
 		select id, name, short_description as shortDescription, full_description as fullDescription, 
 		search_tags as searchTags, open_hours as openHours, shop_type as shopType, 
-		district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl
+		district, address, phone, latitude1000000, longitude1000000, photo_url as photoUrl,
+		is_deleted as isDeleted
 		from shop
 		where is_deleted = false
 		]]>

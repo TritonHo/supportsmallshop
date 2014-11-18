@@ -38,6 +38,9 @@ public class Shop {
 	public int longitude1000000; /* the value of longitude * 1000000, the Accuracy is ~0.1m */
 	@Expose
 	public String photoUrl;
+	@Expose
+	public boolean isDeleted;
+	
 	
 	//eulerian distance is used, some error but acceptable for HongKong
 	public boolean isWithinSearch(int latitude1000000, int longitude1000000, double searchRange)

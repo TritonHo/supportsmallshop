@@ -93,7 +93,7 @@ public class DeleteShopSubmission {
 		h.put("acceptIncrement", isAccept == true?1:0 );
 		if (isProcessed == true)
 			h.put("isProcessed", isProcessed );
-		int updateResult = session.update("updateSubmission", h);
+		int updateResult = session.update("updateRemoval", h);
 		
 		//if updateResult = 0, then there is concurrent update, and thus no need to process the submission
 		if (updateResult > 0 && isProcessed == true && acceptDiff >= Config.ACCEPT_SUBMISSION_THRESHOLD)

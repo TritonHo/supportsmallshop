@@ -4,7 +4,9 @@
 
 2.  package installation
 
-sudo apt-get install tomcat7 postgresql-9.3 postgresql-contrib-9.3 git redis-server
+sudo apt-get install tomcat7 git redis-server
+sudo apt-get install postgresql postgresql-contrib
+
 
 3.  update tomcat memory to 512Mb
     edit: /etc/init.d/tomcat7
@@ -21,3 +23,12 @@ sudo apt-get install tomcat7 postgresql-9.3 postgresql-contrib-9.3 git redis-ser
 6.	allow tomcat7 to bind port 80
 	http://stackoverflow.com/questions/23272666/tomcat7-bind-to-port-80-fails-in-ubuntu-14-04lts
 
+7.	deploy postgresql.config, pg_hba.conf file into /etc/postgresql,
+	then restart postgresql 
+	(remember postgresql.config is using 9.3 version, change the path in it if the postgresql is 9.4)
+
+8.	deploy /etc/supportsmallshop folder, update the content of /etc/supportsmallshop/google_gcm_key.txt
+
+9.	install go language 1.3
+	http://golang.org/doc/install
+	https://storage.googleapis.com/golang/go1.3.3.linux-amd64.tar.gz
